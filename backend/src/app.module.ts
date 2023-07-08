@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { CourtsModule } from './courts/courts.module';
-
+import { NominatimModule } from './nominatim/nominatim.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -12,6 +12,7 @@ import { CourtsModule } from './courts/courts.module';
       `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.zm2yods.mongodb.net/go-court?retryWrites=true&w=majority`,
     ),
     CourtsModule,
+    NominatimModule,
   ],
   controllers: [AppController],
   providers: [AppService],

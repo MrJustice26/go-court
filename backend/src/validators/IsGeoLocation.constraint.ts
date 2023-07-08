@@ -6,22 +6,21 @@ import {
 
 @ValidatorConstraint({ name: 'IsGeoLocation', async: false })
 export class IsGeoLocationConstraint implements ValidatorConstraintInterface {
-  validate(value: any[]) {
-    if (!(value instanceof Array)) {
+  validate(value: { lat: number; lon: number }) {
+    if (!value?.lat || !value?.lon) {
       return false;
     }
 
-    if (value.length !== 2) {
+    if (typeof value.lat !== 'number' || typeof value.lon !== 'number') {
       return false;
     }
-    const isEverythingNumber = value.every((item) => {
-      return typeof item === 'number';
-    });
 
-    if (!isEverythingNumber) return false;
-
-    if (value[0] < -90 || value[0] > 90 || value[1] < -180 || value[1] > 180) {
-      console.log('value 3');
+    if (
+      value.lat < -90 ||
+      value.lat > 90 ||
+      value.lon < -180 ||
+      value.lon > 180
+    ) {
       return false;
     }
 
@@ -29,19 +28,15 @@ export class IsGeoLocationConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    if (!args.value) {
-      return `${args.property} must not be empty`;
-    }
-    if (!(args.value instanceof Array)) {
-      return `${args.property} must be an array`;
+    if (!args.value?.lat || !args.value?.lon) {
+      return `${args.property} should containt lat and lon keys`;
     }
 
-    if (args.value.length !== 2) {
-      return `${args.property} must have length 2`;
-    }
-
-    if (args.value.every((item) => typeof item !== 'number')) {
-      return `${args.property} must be an array with 2 numeric elements representing latitude and longitude, respectively`;
+    if (
+      typeof args.value.lat !== 'number' ||
+      typeof args.value.lon !== 'number'
+    ) {
+      return `${args.property} property lat and lon should be number type`;
     }
 
     return `invalid value for ${args.property}: latitude can't be lower than -90 or higher than 90, and longitude can't be lower than -180 or higher than 180.`;

@@ -11,11 +11,19 @@ export class Court {
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({ type: Number })
   court_type: number;
 
-  @Prop()
-  location: [number, number];
+  @Prop({
+    type: {
+      lat: { type: Number },
+      lon: { type: Number },
+    },
+  })
+  location: { lat: number; lon: number };
+
+  @Prop({ type: String })
+  readable_address: string;
 }
 
 export const CourtSchema = SchemaFactory.createForClass(Court);

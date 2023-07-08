@@ -9,5 +9,8 @@ export class CreateCourtDto {
   description: string;
 
   @IsGeoLocation()
-  location: [number, number];
+  location: {
+    lat: number;
+    lon: number;
+  };
 }
