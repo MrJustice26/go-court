@@ -1,13 +1,22 @@
 import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { QueryDto } from './dto/search-query.dto';
 
 @Injectable()
 export class NominatimService {
   constructor(private readonly httpService: HttpService) {}
 
   readonly baseUrl: string = 'https://nominatim.openstreetmap.org';
-  readonly restQueryParams: string = 'format=json&accept-language=pl';
+  readonly restQuery = {
+    'accept-language': 'pl',
+    countrycodes: 'pl',
+    limit: 5,
+    format: 'json',
+  };
+  readonly restQueryParams: string = Object.keys(this.restQuery)
+    .map((k) => `${k}=${this.restQuery[k]}`)
+    .join('&');
 
   getReadableAddress = async (location: { lat: number; lng: number }) => {
     const { data } = await firstValueFrom(
@@ -31,5 +40,19 @@ export class NominatimService {
     return `${data?.address?.road}${
       data?.address?.house_number ? ` ${data?.address?.house_number}` : ''
     }, ${data?.address?.city || data?.address?.village}`;
+  };
+
+  searchByQuery = async (query: QueryDto) => {
+    const { data } = await firstValueFrom(
+      this.httpService.get(
+        `${this.baseUrl}/search?q="${query.q}"&addressdetails=1&${this.restQueryParams}`,
+      ),
+    );
+
+    return data.map((place) => ({
+      lat: place?.lat,
+      lon: place?.lon,
+      display_name: place?.display_name,
+    }));
   };
 }
