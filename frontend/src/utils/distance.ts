@@ -1,17 +1,20 @@
-type Location = [number, number];
+type Location = {
+  lat: number;
+  lng: number;
+};
 
 export const distance = (from: Location, to: Location) => {
-  const fromLon = (from[0] * Math.PI) / 180;
-  const toLon = (to[0] * Math.PI) / 180;
-  const fromLat = (from[1] * Math.PI) / 180;
-  const toLat = (to[1] * Math.PI) / 180;
+  const fromLng = (from.lng * Math.PI) / 180;
+  const toLng = (to.lng * Math.PI) / 180;
+  const fromLat = (from.lat * Math.PI) / 180;
+  const toLat = (to.lat * Math.PI) / 180;
 
   // Haversine formula
-  const dlon = toLon - fromLon;
+  const dlng = toLng - fromLng;
   const dlat = toLat - fromLat;
   const a =
     Math.pow(Math.sin(dlat / 2), 2) +
-    Math.cos(fromLat) * Math.cos(toLat) * Math.pow(Math.sin(dlon / 2), 2);
+    Math.cos(fromLat) * Math.cos(toLat) * Math.pow(Math.sin(dlng / 2), 2);
 
   const c = 2 * Math.asin(Math.sqrt(a));
 

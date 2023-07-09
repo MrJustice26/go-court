@@ -11,6 +11,6 @@ export class CreateCourtDto {
   @IsGeoLocation()
   location: {
     lat: number;
-    lon: number;
+    lng: number;
   };
 }

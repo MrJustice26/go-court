@@ -6,11 +6,11 @@ export class NominatimController {
 
   @Get('readable-address')
   async getReadableAddress(@Query() query) {
-    if (!query?.lat || !query.lon) return null;
+    if (!query?.lat || !query?.lng) return null;
 
     const location = {
       lat: query.lat,
-      lon: query.lon,
+      lng: query.lng,
     };
     const address = await this.nominatimService.getReadableAddress(location);
     return { address: address || 'No address' };

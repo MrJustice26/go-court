@@ -11,7 +11,7 @@ type Marker = {
   text: string;
   location: {
     lat: number;
-    lon: number;
+    lng: number;
   };
 };
 
@@ -25,6 +25,15 @@ const map = ref<null | L.Map>(null);
 const markers = computed(() => props.markers);
 const leafletMarkers = ref<L.Marker<any>[]>([]);
 
+const emit = defineEmits(["click"]);
+
+const computedCenter = computed(() => props.center);
+watch(computedCenter, () => {
+  if (!map.value) return;
+  if (!props.center || props.center.length !== 2) return;
+  map.value.setView(new L.LatLng(props.center[0], props.center[1]));
+});
+
 const setupLeafletMap = () => {
   map.value = L.map("map", {
     center: props.center || [51.505, 20],
@@ -37,7 +46,7 @@ const setupLeafletMap = () => {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map.value);
 
-  map.value.addEventListener("click", (e) => console.log("Clicked", e));
+  map.value.addEventListener("click", (e) => emit("click", e));
 
   loadMarkers();
 };
@@ -47,7 +56,7 @@ const loadMarkers = () => {
   leafletMarkers.value = markers.value.map((marker) => {
     const markerLocation = [
       marker.location.lat,
-      marker.location.lon,
+      marker.location.lng,
     ] as LatLngTuple;
     const markerInstance = L.marker(markerLocation);
     markerInstance.addTo(map.value as Map).bindPopup(marker.title);

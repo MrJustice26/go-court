@@ -22,7 +22,7 @@ export class CourtsService {
   async createCourt(
     name: string,
     description: string,
-    location: { lat: number; lon: number },
+    location: { lat: number; lng: number },
   ): Promise<Court> {
     const readableAddress = await this.nominatimService.getReadableAddress(
       location,

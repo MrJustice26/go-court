@@ -9,10 +9,10 @@ export class NominatimService {
   readonly baseUrl: string = 'https://nominatim.openstreetmap.org';
   readonly restQueryParams: string = 'format=json&accept-language=pl';
 
-  getReadableAddress = async (location: { lat: number; lon: number }) => {
+  getReadableAddress = async (location: { lat: number; lng: number }) => {
     const { data } = await firstValueFrom(
       this.httpService.get(
-        `${this.baseUrl}/reverse?lat=${location.lat}&lon=${location.lon}&${this.restQueryParams}`,
+        `${this.baseUrl}/reverse?lat=${location.lat}&lon=${location.lng}&${this.restQueryParams}`,
       ),
     );
 

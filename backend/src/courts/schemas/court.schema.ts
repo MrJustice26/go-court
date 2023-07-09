@@ -17,10 +17,10 @@ export class Court {
   @Prop({
     type: {
       lat: { type: Number },
-      lon: { type: Number },
+      lng: { type: Number },
     },
   })
-  location: { lat: number; lon: number };
+  location: { lat: number; lng: number };
 
   @Prop({ type: String })
   readable_address: string;
