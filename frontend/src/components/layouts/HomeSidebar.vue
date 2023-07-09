@@ -7,7 +7,10 @@
     >
       Your location
     </label>
-    <HomeUserLocationSearchInput class="mb-10" />
+    <HomeUserLocationSearchInput
+      class="mb-10"
+      @input="handleUserLocationSearch"
+    />
     <HomeCourtSearchInput placeholder="Orlik im. Jay-Z" class="mb-5" />
     <ul>
       <li v-for="court in courtsStore.readonlyCourts" class="mb-2">
@@ -29,6 +32,7 @@ import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "../HomeCourtCard.vue";
 import HomeCourtSearchInput from "../HomeCourtSearchInput.vue";
 import HomeUserLocationSearchInput from "../HomeUserLocationSearchInput.vue";
+import { useFetch } from "@vueuse/core";
 
 const courtsStore = useCourtsStore();
 const userLocationStore = useUserLocationStore();
@@ -40,6 +44,17 @@ const userLocation = {
 
 const handleCourtCardClick = (location: { lat: number; lng: number }) => {
   courtsStore.setCourtsMapCenter(location);
+};
+
+const handleUserLocationSearch = async (value: string) => {
+  const userLocationSearchURL = `http://localhost:3000/nominatim/search?q=${value}`;
+
+  const { data, error } = await useFetch(userLocationSearchURL);
+  if (error.value) {
+    console.error(error.value);
+    return;
+  }
+  console.log(JSON.parse(data.value as string));
 };
 
 onMounted(() => {

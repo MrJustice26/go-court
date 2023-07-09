@@ -3,12 +3,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import BaseInput from "./base/BaseInput.vue";
+import { watchDebounced } from "@vueuse/core";
 
 const searchInput = ref("");
 
-watch(searchInput, () => {
-  console.log(searchInput.value);
-});
+const emit = defineEmits(["input"]);
+
+watchDebounced(
+  searchInput,
+  () => {
+    emit("input", searchInput.value);
+  },
+  { debounce: 1000 }
+);
 </script>
