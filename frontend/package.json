@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^10.2.1",
     "leaflet": "^1.9.4",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.1.4",

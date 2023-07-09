@@ -3,9 +3,9 @@ import { createPinia } from "pinia";
 import router from "./router";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { IoLocationSharp } from "oh-vue-icons/icons";
+import { LaLocationArrowSolid, IoLocationSharp, GiPathDistance } from "oh-vue-icons/icons";
 
-addIcons(IoLocationSharp);
+addIcons(LaLocationArrowSolid, IoLocationSharp, GiPathDistance);
 
 import "./index.css";
 import "leaflet/dist/leaflet.css";

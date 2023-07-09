@@ -17,7 +17,7 @@ type Marker = {
 
 type BaseLeafletMap = {
   markers: Marker[];
-  center?: [number, number];
+  center?: { lat: number; lng: number };
 };
 
 const props = defineProps<BaseLeafletMap>();
@@ -30,14 +30,14 @@ const emit = defineEmits(["click"]);
 const computedCenter = computed(() => props.center);
 watch(computedCenter, () => {
   if (!map.value) return;
-  if (!props.center || props.center.length !== 2) return;
-  map.value.setView(new L.LatLng(props.center[0], props.center[1]));
+  if (!props.center || !props.center?.lat || !props.center?.lng) return;
+  map.value.setView(new L.LatLng(props.center.lat, props.center.lng), 17);
 });
 
 const setupLeafletMap = () => {
   map.value = L.map("map", {
     center: props.center || [51.505, 20],
-    zoom: 13,
+    zoom: 17,
     maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)),
   });
 

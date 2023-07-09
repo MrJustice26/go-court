@@ -4,7 +4,7 @@
     <BaseLeafletMap
       v-if="courtsStore.readonlyCourts.length > 0"
       :markers="courtsStore.readonlyMapDataCourts"
-      :center="[52.4054632, 16.9217828]"
+      :center="courtsStore.readonlyCourtsMapCenter"
       class="w-1/2"
       @click="handleMapClick"
     />
@@ -14,8 +14,8 @@
 <script setup lang="ts">
 import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
 import HomeSidebar from "@/components/layouts/HomeSidebar.vue";
-import { useCourtsStore } from "@/stores/courts";
 import { LeafletMouseEvent } from "leaflet";
+import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 
 const courtsStore = useCourtsStore();

@@ -3,7 +3,23 @@ type Location = {
   lng: number;
 };
 
-export const distance = (from: Location, to: Location) => {
+const formatDistance = (distanceInKM: number) => {
+  if (distanceInKM < 1) {
+    return `${Math.ceil(distanceInKM * 1000)} m`;
+  }
+
+  if (distanceInKM > 10) {
+    return `${Math.ceil(distanceInKM)} km`;
+  }
+
+  return `${distanceInKM.toFixed(2)} km`;
+};
+
+export const distance = (
+  from: Location,
+  to: Location,
+  shouldFormat?: boolean
+) => {
   const fromLng = (from.lng * Math.PI) / 180;
   const toLng = (to.lng * Math.PI) / 180;
   const fromLat = (from.lat * Math.PI) / 180;
@@ -22,5 +38,8 @@ export const distance = (from: Location, to: Location) => {
   // for miles
   const r = 6371;
 
+  if (shouldFormat) {
+    return formatDistance(c * r);
+  }
   return c * r;
 };

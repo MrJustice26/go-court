@@ -1,6 +1,5 @@
 <template>
   <input
-    placeholder="Orlik im. Jay-Z"
     class="border w-full py-3 px-4 rounded-md focus:border-zinc-800 transition-colors outline-none"
     :value="modelValue"
     @input="

@@ -36,8 +36,11 @@ export const useUserLocationStore = defineStore("user-location", () => {
 
   const readonlyUserLocation = computed(() => userLocation.value);
 
-  const getRelativeDistance = (objectLocation: Location) => {
-    return distance(userLocation.value.location, objectLocation);
+  const getRelativeDistance = (
+    objectLocation: Location,
+    shouldFormat?: boolean
+  ) => {
+    return distance(userLocation.value.location, objectLocation, shouldFormat);
   };
 
   return {
