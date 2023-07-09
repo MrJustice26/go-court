@@ -16,12 +16,6 @@ export class NominatimService {
       ),
     );
 
-    if (!data?.address?.city || !data?.address?.road) {
-      return null;
-    }
-
-    return `${data.address.road}${
-      data.address.house_number ? ` ${data.address.house_number}` : ''
-    }, ${data.address?.country}`;
+    return data?.display_name;
   };
 }
