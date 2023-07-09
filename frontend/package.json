@@ -11,6 +11,7 @@
   "dependencies": {
     "leaflet": "^1.9.4",
     "oh-vue-icons": "^1.0.0-rc3",
+    "pinia": "^2.1.4",
     "vue": "^3.2.47",
     "vue-router": "^4.2.4"
   },
