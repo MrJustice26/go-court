@@ -16,6 +16,20 @@ export class NominatimService {
       ),
     );
 
-    return data?.display_name;
+    const fallbackDisplayTemplate = data?.display_name;
+    if (!data?.display_name) {
+      return data?.display_name;
+    }
+
+    if (
+      (!data?.address?.city && !data?.address?.village) ||
+      !data?.address?.road
+    ) {
+      return fallbackDisplayTemplate;
+    }
+
+    return `${data?.address?.road}${
+      data?.address?.house_number ? ` ${data?.address?.house_number}` : ''
+    }, ${data?.address?.city || data?.address?.village}`;
   };
 }

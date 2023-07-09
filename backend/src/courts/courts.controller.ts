@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 
@@ -15,8 +23,8 @@ export class CourtsControlller {
   }
 
   @Get()
-  async getCourts(): Promise<Court[]> {
-    return this.courtsService.getCourts();
+  async getCourts(@Query() query): Promise<Court[]> {
+    return this.courtsService.getCourts(query?.name);
   }
 
   @Post('create')

@@ -12,11 +12,17 @@ export class CourtsService {
   ) {}
 
   async getCourtById(courtId: string): Promise<Court> {
-    return this.courtsRepository.findOne({ id: courtId });
+    return this.courtsRepository.findOne({ _id: courtId });
   }
 
-  async getCourts(): Promise<Court[]> {
-    return this.courtsRepository.find({});
+  async getCourts(name?: string): Promise<Court[]> {
+    if (!name) {
+      return this.courtsRepository.find({});
+    }
+    const nameWithoutDoubleQuotes = name.replace(/['"]+/g, '');
+    return this.courtsRepository.find({
+      name: { $regex: nameWithoutDoubleQuotes, $options: 'i' },
+    });
   }
 
   async createCourt(
