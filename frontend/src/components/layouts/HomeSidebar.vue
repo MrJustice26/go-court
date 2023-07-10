@@ -7,11 +7,8 @@
     >
       Your location
     </label>
-    <HomeUserLocationSearchInput
-      class="mb-10"
-      @input="handleUserLocationSearch"
-    />
-    <HomeCourtSearchInput placeholder="Orlik im. Jay-Z" class="mb-5" />
+    <HomeUserLocationSearchBar class="mb-10" />
+    <HomeCourtSearchBar placeholder="Orlik im. Jay-Z" class="mb-5" />
     <ul>
       <li v-for="court in courtsStore.readonlyCourts" class="mb-2">
         <HomeCourtCard
@@ -30,8 +27,8 @@ import { onMounted } from "vue";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "../HomeCourtCard.vue";
-import HomeCourtSearchInput from "../HomeCourtSearchInput.vue";
-import HomeUserLocationSearchInput from "../HomeUserLocationSearchInput.vue";
+import HomeCourtSearchBar from "../HomeCourtSearchBar.vue";
+import HomeUserLocationSearchBar from "../HomeUserLocationSearchBar.vue";
 import { useFetch } from "@vueuse/core";
 
 const courtsStore = useCourtsStore();

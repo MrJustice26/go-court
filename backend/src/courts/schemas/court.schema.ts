@@ -1,4 +1,4 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export type CourtDocument = Court & Document;
@@ -14,12 +14,12 @@ export class Court {
   @Prop({ type: Number })
   court_type: number;
 
-  @Prop({
-    type: {
+  @Prop(
+    raw({
       lat: { type: Number },
       lng: { type: Number },
-    },
-  })
+    }),
+  )
   location: { lat: number; lng: number };
 
   @Prop({ type: String })
