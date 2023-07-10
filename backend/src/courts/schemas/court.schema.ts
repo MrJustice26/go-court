@@ -5,13 +5,13 @@ export type CourtDocument = Court & Document;
 
 @Schema()
 export class Court {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
-  @Prop({ type: Number })
+  @Prop({ type: Number, required: true })
   court_type: number;
 
   @Prop(
@@ -22,7 +22,7 @@ export class Court {
   )
   location: { lat: number; lng: number };
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readable_address: string;
 }
 
