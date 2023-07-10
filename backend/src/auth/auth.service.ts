@@ -1,18 +1,53 @@
-import { Injectable } from '@nestjs/common';
-import { SignInDto } from './dto/sign-in.dot';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AuthDto } from './dto/auth.dot';
 import { UsersRepository } from 'src/users/users.repository';
-import { SignUpDto } from './dto/sign-up.dot';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersRepository: UsersRepository) {}
-  async signIn(signInDto: SignInDto): Promise<SignInDto> {
-    const user = await this.usersRepository.findOne(signInDto);
-    return user;
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  // TODO FINISH refreshToken & accessToken
+  async signIn({ email, password }: AuthDto) {
+    const user = await this.usersRepository.findOne({ email });
+
+    if (!user) {
+      throw new UnauthorizedException('Credentials are incorrect');
+    }
+
+    const isPasswordEqual = await bcrypt.compare(password, user.password);
+    if (!isPasswordEqual) {
+      throw new UnauthorizedException('Credentials are incorrect');
+    }
+
+    const payload = { email, password: user.password };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
-  async signUp(signUpDto: SignUpDto): Promise<SignUpDto> {
-    const newUser = await this.usersRepository.create(signUpDto);
+  async signUp({ email, password }: AuthDto): Promise<AuthDto> {
+    const user = await this.usersRepository.findOne({ email });
+    if (user) {
+      throw new BadRequestException('User with this email already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await this.usersRepository.create({
+      email,
+      password: hashedPassword,
+    });
+
     return newUser;
   }
 }
