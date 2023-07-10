@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { CourtsModule } from './courts/courts.module';
 import { NominatimModule } from './nominatim/nominatim.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -13,6 +15,8 @@ import { NominatimModule } from './nominatim/nominatim.module';
     ),
     CourtsModule,
     NominatimModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
