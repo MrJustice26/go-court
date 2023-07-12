@@ -1,8 +1,10 @@
 <template>
-  <TheHeader></TheHeader>
-  <main>
-    <RouterView></RouterView>
-  </main>
+  <div class="dark:bg-zinc-700 bg-white">
+    <TheHeader></TheHeader>
+    <main>
+      <RouterView></RouterView>
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
