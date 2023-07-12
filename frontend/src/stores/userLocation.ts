@@ -21,6 +21,13 @@ export const useUserLocationStore = defineStore("user-location", () => {
     readableAddress: "",
   });
 
+  const isUserLocationNotChosen = computed(() => {
+    return (
+      userLocation.value.location.lat === 0 &&
+      userLocation.value.location.lng === 0
+    );
+  });
+
   const setUserLocation = (location: Location) => {
     userLocation.value.location = location;
     setReadableAddress(location);
@@ -32,6 +39,7 @@ export const useUserLocationStore = defineStore("user-location", () => {
     );
     const data = await response.json();
     userLocation.value.readableAddress = data.address;
+    saveUserLocationDataToLocalStorage();
   };
 
   const readonlyUserLocation = computed(() => userLocation.value);
@@ -43,9 +51,30 @@ export const useUserLocationStore = defineStore("user-location", () => {
     return distance(userLocation.value.location, objectLocation, shouldFormat);
   };
 
+  const saveUserLocationDataToLocalStorage = () => {
+    localStorage.setItem("user-location", JSON.stringify(userLocation.value));
+  };
+
+  const getUserLocationFromLocalStorage = () => {
+    return localStorage.getItem("user-location");
+  };
+
+  const loadUserLocationData = () => {
+    const rawUserLocationData = getUserLocationFromLocalStorage();
+    if (!rawUserLocationData) {
+      return;
+    }
+
+    const userLocationData = JSON.parse(rawUserLocationData) as UserLocation;
+
+    setUserLocation(userLocationData.location);
+  };
+
   return {
     setUserLocation,
     readonlyUserLocation,
     getRelativeDistance,
+    loadUserLocationData,
+    isUserLocationNotChosen,
   };
 });

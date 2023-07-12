@@ -25,27 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useUserLocationStore } from "@/stores/userLocation";
 import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "./CourtCard.vue";
 import HomeCourtSearchBar from "./CourtSearchBar.vue";
 import HomeUserLocationSearchBar from "./UserLocationSearchBar.vue";
 
 const courtsStore = useCourtsStore();
-const userLocationStore = useUserLocationStore();
-
-const userLocation = {
-  lat: 52.40739993786911,
-  lng: 16.917417094545577,
-};
 
 const handleCourtCardClick = (location: { lat: number; lng: number }) => {
   courtsStore.setCourtsMapCenter(location);
 };
-
-onMounted(() => {
-  userLocationStore.setUserLocation(userLocation);
-  courtsStore.setCourtsMapCenter(userLocation);
-});
 </script>

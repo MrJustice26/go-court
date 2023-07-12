@@ -10,12 +10,16 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
 import HomeSidebar from "@/components/home/TheSidebar.vue";
 import { useCourtsStore } from "@/stores/courts";
+import { useUserLocationStore } from "@/stores/userLocation";
+import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/mapCenter";
 import { type Court } from "@/types";
 
 const courtsStore = useCourtsStore();
+const userLocationStore = useUserLocationStore();
 
 const fetchCourts = async () => {
   const response = await fetch("http://localhost:3000/courts");
@@ -30,6 +34,16 @@ const fetchCourts = async () => {
 
   courtsStore.setCourts(mappedData);
 };
+
+onMounted(() => {
+  if (userLocationStore.isUserLocationNotChosen) {
+    courtsStore.setCourtsMapCenter(DEFAULT_MAP_CENTER_COORDINATES);
+  } else {
+    courtsStore.setCourtsMapCenter(
+      userLocationStore.readonlyUserLocation.location
+    );
+  }
+});
 
 fetchCourts();
 </script>
