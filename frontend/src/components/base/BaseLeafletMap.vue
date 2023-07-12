@@ -80,3 +80,18 @@ onMounted(() => {
   setupLeafletMap();
 });
 </script>
+
+<style>
+@media (prefers-color-scheme: dark) {
+  .leaflet-layer,
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }
+
+  .leaflet-control-attribution {
+    background-color: rgb(24 24 27) !important;
+    color: white !important;
+  }
+}
+</style>
