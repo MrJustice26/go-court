@@ -1,9 +1,11 @@
 <template>
-  <aside class="p-5">
-    <h1 class="text-3xl font-medium text-center mb-5">Find your court</h1>
+  <aside class="p-5 dark:bg-zinc-700">
+    <h1 class="text-3xl font-medium text-center mb-5 dark:text-white">
+      Find your court
+    </h1>
     <label
       for="location-input"
-      class="font-medium text-zinc-600 inline-block mb-1"
+      class="font-medium inline-block mb-1 dark:text-white"
     >
       Your location
     </label>
@@ -29,7 +31,6 @@ import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "../HomeCourtCard.vue";
 import HomeCourtSearchBar from "../HomeCourtSearchBar.vue";
 import HomeUserLocationSearchBar from "../HomeUserLocationSearchBar.vue";
-import { useFetch } from "@vueuse/core";
 
 const courtsStore = useCourtsStore();
 const userLocationStore = useUserLocationStore();
@@ -41,17 +42,6 @@ const userLocation = {
 
 const handleCourtCardClick = (location: { lat: number; lng: number }) => {
   courtsStore.setCourtsMapCenter(location);
-};
-
-const handleUserLocationSearch = async (value: string) => {
-  const userLocationSearchURL = `http://localhost:3000/nominatim/search?q=${value}`;
-
-  const { data, error } = await useFetch(userLocationSearchURL);
-  if (error.value) {
-    console.error(error.value);
-    return;
-  }
-  console.log(JSON.parse(data.value as string));
 };
 
 onMounted(() => {
