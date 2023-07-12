@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core";
 import { ref } from "vue";
-import BaseInput from "./base/BaseInput.vue";
+import BaseInput from "@/components/base/BaseInput.vue";
 import { useCourtsStore } from "@/stores/courts";
 
 const courtsStore = useCourtsStore();

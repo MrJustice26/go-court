@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
-import HomeSidebar from "@/components/layouts/HomeSidebar.vue";
+import HomeSidebar from "@/components/home/TheSidebar.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { type Court } from "@/types";
 

@@ -28,9 +28,9 @@
 import { onMounted } from "vue";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useCourtsStore } from "@/stores/courts";
-import HomeCourtCard from "../HomeCourtCard.vue";
-import HomeCourtSearchBar from "../HomeCourtSearchBar.vue";
-import HomeUserLocationSearchBar from "../HomeUserLocationSearchBar.vue";
+import HomeCourtCard from "./CourtCard.vue";
+import HomeCourtSearchBar from "./CourtSearchBar.vue";
+import HomeUserLocationSearchBar from "./UserLocationSearchBar.vue";
 
 const courtsStore = useCourtsStore();
 const userLocationStore = useUserLocationStore();

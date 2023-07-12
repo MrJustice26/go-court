@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, toRefs, computed } from "vue";
-import BaseInput from "./base/BaseInput.vue";
+import BaseInput from "@/components/base/BaseInput.vue";
 import { useFetch, onClickOutside, useDebounce } from "@vueuse/core";
 import { useUserLocationStore } from "@/stores/userLocation";
 
@@ -112,7 +112,6 @@ const fetchSuggestedLocationsByQuery = async (value: string) => {
     return;
   }
   receivedLocations.value = data;
-  console.log(data);
   setIsFetching(false);
 
   setListVisibility(true);
