@@ -1,12 +1,14 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { NominatimService } from './nominatim.service';
-import { QueryDto } from './dto/search-query.dto';
+import { SearchQueryDto } from './dto/search-query.dto';
+import { ReadableQueryDto } from './dto/readable-query.dto';
+
 @Controller('nominatim')
 export class NominatimController {
   constructor(private readonly nominatimService: NominatimService) {}
 
   @Get('readable-address')
-  async getReadableAddress(@Query() query) {
+  async getReadableAddress(@Query() query: ReadableQueryDto) {
     if (!query?.lat || !query?.lng) return null;
 
     const location = {
@@ -18,7 +20,7 @@ export class NominatimController {
   }
 
   @Get('search')
-  async searchByQuery(@Query() query: QueryDto) {
+  async searchByQuery(@Query() query: SearchQueryDto) {
     const data = await this.nominatimService.searchByQuery(query);
     return data;
   }

@@ -1,7 +1,8 @@
 import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { QueryDto } from './dto/search-query.dto';
+import { SearchQueryDto } from './dto/search-query.dto';
+import { ReadableQueryDto } from './dto/readable-query.dto';
 
 @Injectable()
 export class NominatimService {
@@ -18,10 +19,10 @@ export class NominatimService {
     .map((k) => `${k}=${this.restQuery[k]}`)
     .join('&');
 
-  getReadableAddress = async (location: { lat: number; lng: number }) => {
+  getReadableAddress = async ({ lat, lng }: ReadableQueryDto) => {
     const { data } = await firstValueFrom(
       this.httpService.get(
-        `${this.baseUrl}/reverse?lat=${location.lat}&lon=${location.lng}&${this.restQueryParams}`,
+        `${this.baseUrl}/reverse?lat=${lat}&lon=${lng}&${this.restQueryParams}`,
       ),
     );
 
@@ -42,7 +43,7 @@ export class NominatimService {
     }, ${data?.address?.city || data?.address?.village}`;
   };
 
-  searchByQuery = async (query: QueryDto) => {
+  searchByQuery = async (query: SearchQueryDto) => {
     const { data } = await firstValueFrom(
       this.httpService.get(
         `${this.baseUrl}/search?q="${query.q}"&addressdetails=1&${this.restQueryParams}`,
@@ -50,8 +51,10 @@ export class NominatimService {
     );
 
     return data.map((place) => ({
-      lat: place?.lat,
-      lon: place?.lon,
+      address: {
+        lat: place?.lat,
+        lng: place?.lon,
+      },
       display_name: place?.display_name,
     }));
   };

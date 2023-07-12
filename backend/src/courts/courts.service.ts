@@ -3,6 +3,7 @@ import { CourtsRepository } from './courts.repository';
 import { Court } from './schemas/court.schema';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { NominatimService } from 'src/nominatim/nominatim.service';
+import { CreateCourtDto } from './dto/create-court.dto';
 
 @Injectable()
 export class CourtsService {
@@ -25,11 +26,11 @@ export class CourtsService {
     });
   }
 
-  async createCourt(
-    name: string,
-    description: string,
-    location: { lat: number; lng: number },
-  ): Promise<Court> {
+  async createCourt({
+    name,
+    description,
+    location,
+  }: CreateCourtDto): Promise<Court> {
     const readableAddress = await this.nominatimService.getReadableAddress(
       location,
     );

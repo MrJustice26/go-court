@@ -29,11 +29,7 @@ export class CourtsControlller {
 
   @Post('create')
   async createCourt(@Body() createCourtDto: CreateCourtDto): Promise<Court> {
-    return this.courtsService.createCourt(
-      createCourtDto.name,
-      createCourtDto.description,
-      createCourtDto.location,
-    );
+    return this.courtsService.createCourt(createCourtDto);
   }
 
   @Patch(':courtId')
