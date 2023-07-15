@@ -25,14 +25,16 @@
 </template>
 
 <script setup lang="ts">
+import { useMapStore } from "@/stores/map";
 import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "./CourtCard.vue";
 import HomeCourtSearchBar from "./CourtSearchBar.vue";
 import HomeUserLocationSearchBar from "./UserLocationSearchBar.vue";
 
 const courtsStore = useCourtsStore();
+const mapStore = useMapStore();
 
 const handleCourtCardClick = (location: { lat: number; lng: number }) => {
-  courtsStore.setCourtsMapCenter(location);
+  mapStore.mapCenterLocation = location;
 };
 </script>

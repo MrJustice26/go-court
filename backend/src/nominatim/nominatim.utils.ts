@@ -14,10 +14,12 @@ export const formatAddress = (data: Place) => {
   }
 
   if (!road) {
-    return `${houseNumber}, ${cityOrVillage} ${postCode}`;
+    return `${
+      houseNumber ? houseNumber + ', ' : ''
+    }${cityOrVillage} ${postCode}`;
   }
 
-  return `${road} ${
+  return `${road}${
     houseNumber ? ` ${houseNumber}` : ''
   }, ${cityOrVillage} ${postCode}`;
 };

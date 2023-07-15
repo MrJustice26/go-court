@@ -3,7 +3,7 @@
     <HomeSidebar class="w-1/2" />
     <BaseLeafletMap
       :markers="courtsStore.readonlyMapDataCourts"
-      :center="courtsStore.readonlyCourtsMapCenter"
+      :center="mapStore.mapCenterLocation"
       class="w-1/2"
     />
   </div>
@@ -15,11 +15,12 @@ import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
 import HomeSidebar from "@/components/home/TheSidebar.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
-import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/map-center";
+import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
 import { type Court } from "@/types";
 
 const courtsStore = useCourtsStore();
+const mapStore = useMapStore();
 
 const userLocationStore = useUserLocationStore();
 
@@ -40,12 +41,9 @@ const fetchCourts = async () => {
 };
 
 onMounted(() => {
-  if (userLocationStore.isUserLocationNotChosen) {
-    courtsStore.setCourtsMapCenter(DEFAULT_MAP_CENTER_COORDINATES);
-  } else {
-    courtsStore.setCourtsMapCenter(
-      userLocationStore.readonlyUserLocation.location
-    );
+  if (!userLocationStore.isUserLocationNotChosen) {
+    mapStore.mapCenterLocation =
+      userLocationStore.readonlyUserLocation.location;
   }
 });
 

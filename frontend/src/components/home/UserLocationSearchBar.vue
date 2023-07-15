@@ -46,8 +46,13 @@ import BaseInput from "@/components/base/BaseInput.vue";
 import { onClickOutside, useDebounce } from "@vueuse/core";
 import { useUserLocationStore } from "@/stores/userLocation";
 import fetchService from "@/services/fetch.service";
+import { NominatimSearchResult } from "@/types";
+import { storeToRefs } from "pinia";
+import { useMapStore } from "@/stores/map";
 
+const mapStore = useMapStore();
 const userLocationStore = useUserLocationStore();
+const { readonlyUserLocation } = storeToRefs(userLocationStore);
 
 type Location = {
   display_name: string;
@@ -97,8 +102,9 @@ watch(delayedSearchInput, () => {
   fetchSuggestedLocationsByQuery(delayedSearchInput.value);
 });
 
-watch(userLocationStore.readonlyUserLocation, (newLocation) => {
+watch(readonlyUserLocation, (newLocation) => {
   searchInput.value = newLocation.readableAddress;
+  mapStore.mapCenterLocation = newLocation.location;
   disableFetch.value = true;
 });
 
@@ -114,12 +120,18 @@ const fetchSuggestedLocationsByQuery = async (query: string) => {
   setListVisibility(true);
 };
 
-const handleLocationCardClick = (location: Location) => {
-  userLocationStore.setUserLocation(location.address);
+const handleLocationCardClick = (location: NominatimSearchResult) => {
+  const userLocation = {
+    location: location.address,
+    readableAddress: location.display_name,
+  };
+  userLocationStore.setUserLocation(userLocation);
   setListVisibility(false);
 };
 
 onMounted(() => {
+  searchInput.value = readonlyUserLocation.value.readableAddress;
+
   onClickOutside(userLocationSearchBar, () => setListVisibility(false));
 });
 </script>

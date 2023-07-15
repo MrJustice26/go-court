@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from "vue";
 import L, { LatLngTuple, Map } from "leaflet";
+import applyLeafletZoomFix from "@/utils/apply-leaflet-zoom-fix";
 
 type Marker = {
   title: string;
@@ -44,9 +45,11 @@ const setupLeafletMap = () => {
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map.value);
+  }).addTo(map.value as Map);
 
   map.value.addEventListener("click", (e) => emit("click", e));
+
+  applyLeafletZoomFix();
 
   loadMarkers();
 };
@@ -65,7 +68,9 @@ const loadMarkers = () => {
 };
 
 const deleteMarkers = () => {
-  leafletMarkers.value.forEach((marker) => map.value?.removeLayer(marker));
+  leafletMarkers.value.forEach((marker) =>
+    map.value?.removeLayer(marker as any)
+  );
   leafletMarkers.value = [];
 };
 
@@ -95,3 +100,4 @@ onMounted(() => {
   }
 }
 </style>
+@/utils/apply-leaflet-zoom-fix

@@ -1,4 +1,3 @@
-import fetchService from "@/services/fetch.service";
 import { distance } from "@/utils/distance";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -31,21 +30,8 @@ export const useUserLocationStore = defineStore("user-location", () => {
     );
   });
 
-  const setUserLocation = (location: Location) => {
-    userLocation.value.location = location;
-    setReadableAddress(location);
-  };
-
-  const setReadableAddress = async (location: Location) => {
-    const data = await fetchService.getReadableAddressByLocation(
-      location.lat,
-      location.lng
-    );
-    if (!data) {
-      console.error("Error on fetching data...");
-      return;
-    }
-    userLocation.value.readableAddress = data.address;
+  const setUserLocation = async (location: UserLocation) => {
+    userLocation.value = location;
     saveUserLocationDataToLocalStorage();
   };
 
@@ -85,7 +71,7 @@ export const useUserLocationStore = defineStore("user-location", () => {
       return;
     }
 
-    setUserLocation(userLocationData.location);
+    setUserLocation(userLocationData as UserLocation);
   };
 
   return {
