@@ -1,3 +1,4 @@
+import fetchService from "@/services/fetch.service";
 import { distance } from "@/utils/distance";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -22,6 +23,8 @@ export const useUserLocationStore = defineStore("user-location", () => {
   });
 
   const isUserLocationNotChosen = computed(() => {
+    if (!userLocation.value.location.lat || !userLocation.value.location.lng)
+      return false;
     return (
       userLocation.value.location.lat === 0 &&
       userLocation.value.location.lng === 0
@@ -34,10 +37,14 @@ export const useUserLocationStore = defineStore("user-location", () => {
   };
 
   const setReadableAddress = async (location: Location) => {
-    const response = await fetch(
-      `http://localhost:3000/nominatim/readable-address?lat=${location.lat}&lng=${location.lng}`
+    const data = await fetchService.getReadableAddressByLocation(
+      location.lat,
+      location.lng
     );
-    const data = await response.json();
+    if (!data) {
+      console.error("Error on fetching data...");
+      return;
+    }
     userLocation.value.readableAddress = data.address;
     saveUserLocationDataToLocalStorage();
   };
@@ -65,7 +72,18 @@ export const useUserLocationStore = defineStore("user-location", () => {
       return;
     }
 
-    const userLocationData = JSON.parse(rawUserLocationData) as UserLocation;
+    const userLocationData = JSON.parse(
+      rawUserLocationData
+    ) as Partial<UserLocation>;
+    if (
+      !userLocationData?.location ||
+      !userLocationData?.readableAddress ||
+      !userLocationData?.location?.lat ||
+      !userLocationData?.location?.lng
+    ) {
+      localStorage.removeItem("user-location");
+      return;
+    }
 
     setUserLocation(userLocationData.location);
   };

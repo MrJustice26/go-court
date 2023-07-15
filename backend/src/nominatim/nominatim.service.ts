@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { SearchQueryDto } from './dto/search-query.dto';
 import { ReadableQueryDto } from './dto/readable-query.dto';
+import { Place } from './nominatim.interface';
+import { formatAddress } from './nominatim.utils';
 
 @Injectable()
 export class NominatimService {
@@ -16,7 +18,7 @@ export class NominatimService {
     format: 'json',
   };
   readonly restQueryParams: string = Object.keys(this.restQuery)
-    .map((k) => `${k}=${this.restQuery[k]}`)
+    .map((restQueryKey) => `${restQueryKey}=${this.restQuery[restQueryKey]}`)
     .join('&');
 
   getReadableAddress = async ({ lat, lng }: ReadableQueryDto) => {
@@ -26,26 +28,12 @@ export class NominatimService {
       ),
     );
 
-    const fallbackDisplayTemplate = data?.display_name;
-    if (!data?.display_name) {
-      return data?.display_name;
-    }
-
-    if (
-      (!data?.address?.city && !data?.address?.village) ||
-      !data?.address?.road
-    ) {
-      return fallbackDisplayTemplate;
-    }
-
-    return `${data?.address?.road}${
-      data?.address?.house_number ? ` ${data?.address?.house_number}` : ''
-    }, ${data?.address?.city || data?.address?.village}`;
+    return formatAddress(data);
   };
 
   searchByQuery = async (query: SearchQueryDto) => {
     const { data } = await firstValueFrom(
-      this.httpService.get(
+      this.httpService.get<Place[]>(
         `${this.baseUrl}/search?q="${query.q}"&addressdetails=1&${this.restQueryParams}`,
       ),
     );
@@ -55,7 +43,7 @@ export class NominatimService {
         lat: parseFloat(place?.lat),
         lng: parseFloat(place?.lon),
       },
-      display_name: place?.display_name,
+      display_name: formatAddress(place),
     }));
   };
 }

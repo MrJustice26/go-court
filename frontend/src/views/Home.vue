@@ -15,15 +15,19 @@ import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
 import HomeSidebar from "@/components/home/TheSidebar.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
-import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/mapCenter";
+import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/map-center";
+import fetchService from "@/services/fetch.service";
 import { type Court } from "@/types";
 
 const courtsStore = useCourtsStore();
+
 const userLocationStore = useUserLocationStore();
 
 const fetchCourts = async () => {
-  const response = await fetch("http://localhost:3000/courts");
-  const data = await response.json();
+  const data = await fetchService.getCourts();
+  if (!data) {
+    return;
+  }
   const mappedData = data.map((court: Court) => ({
     name: court.name,
     description: court.description,

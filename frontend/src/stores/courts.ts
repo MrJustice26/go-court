@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import fetchService from "@/services/fetch.service";
 
 type Court = {
   name: string;
@@ -47,9 +48,12 @@ export const useCourtsStore = defineStore("courts", () => {
   };
 
   const fetchCourtsByName = async (name: string) => {
-    const url = `http://localhost:3000/courts?name=${name}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = await fetchService.getCourtsByName(name);
+    if (!data) {
+      console.error("Error on fetching...");
+      return;
+    }
+
     const mappedData = data.map((court) => ({
       name: court.name,
       description: court.description,

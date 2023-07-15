@@ -41,13 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, toRefs, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import BaseInput from "@/components/base/BaseInput.vue";
-import { useFetch, onClickOutside, useDebounce } from "@vueuse/core";
+import { onClickOutside, useDebounce } from "@vueuse/core";
 import { useUserLocationStore } from "@/stores/userLocation";
+import fetchService from "@/services/fetch.service";
 
 const userLocationStore = useUserLocationStore();
-const { readableAddress } = toRefs(userLocationStore.readonlyUserLocation);
 
 type Location = {
   display_name: string;
@@ -97,18 +97,15 @@ watch(delayedSearchInput, () => {
   fetchSuggestedLocationsByQuery(delayedSearchInput.value);
 });
 
-watch(readableAddress, (newReadableAddress) => {
-  searchInput.value = newReadableAddress;
+watch(userLocationStore.readonlyUserLocation, (newLocation) => {
+  searchInput.value = newLocation.readableAddress;
   disableFetch.value = true;
 });
 
-const fetchSuggestedLocationsByQuery = async (value: string) => {
-  const userLocationSearchURL = `http://localhost:3000/nominatim/search?q=${value}`;
-
-  const { data: plainData, error } = await useFetch(userLocationSearchURL);
-  const data = JSON.parse(plainData.value as string) as Location[];
-  if (error.value) {
-    console.error(error.value);
+const fetchSuggestedLocationsByQuery = async (query: string) => {
+  const data = await fetchService.getLocationsByAddressQuery(query);
+  if (!data) {
+    console.error("Error on fetching");
     return;
   }
   receivedLocations.value = data;
