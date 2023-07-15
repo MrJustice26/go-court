@@ -52,8 +52,8 @@ export class NominatimService {
 
     return data.map((place) => ({
       address: {
-        lat: place?.lat,
-        lng: place?.lon,
+        lat: parseFloat(place?.lat),
+        lng: parseFloat(place?.lon),
       },
       display_name: place?.display_name,
     }));
