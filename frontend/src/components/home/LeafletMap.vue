@@ -1,15 +1,26 @@
 <template>
-  <div id="map" style="width: 100%; height: 100%"></div>
+  <div id="map"></div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from "vue";
-import L, { LatLngTuple, Map } from "leaflet";
+import {
+  LatLngTuple,
+  Map,
+  LatLng,
+  icon,
+  map,
+  latLngBounds,
+  latLng,
+  marker,
+  tileLayer,
+  PopupEvent,
+} from "leaflet";
 import applyLeafletZoomFix from "@/utils/apply-leaflet-zoom-fix";
 
+// TODO Move all common types to shared types folder
 type Marker = {
-  title: string;
-  text: string;
+  id: string;
   location: {
     lat: number;
     lng: number;
@@ -18,36 +29,43 @@ type Marker = {
 
 type BaseLeafletMap = {
   markers: Marker[];
-  center?: { lat: number; lng: number };
+  center: { lat: number; lng: number };
 };
 
+type CustomMarker = L.Marker & { courtId: string };
+
 const props = defineProps<BaseLeafletMap>();
-const map = ref<null | L.Map>(null);
+const mapInstance = ref<null | L.Map>(null);
 const markers = computed(() => props.markers);
 const leafletMarkers = ref<L.Marker<any>[]>([]);
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits(["marker-click"]);
 
 const computedCenter = computed(() => props.center);
 watch(computedCenter, () => {
-  if (!map.value) return;
+  if (!mapInstance.value) return;
   if (!props.center || !props.center?.lat || !props.center?.lng) return;
-  map.value.setView(new L.LatLng(props.center.lat, props.center.lng), 17);
+  mapInstance.value.setView(new LatLng(props.center.lat, props.center.lng), 17);
 });
 
+const setupBasketballIcon = () => {
+  return icon({
+    iconUrl: "../../src/assets/basketball.png",
+    iconSize: [40, 40],
+  });
+};
+
 const setupLeafletMap = () => {
-  map.value = L.map("map", {
-    center: props.center || [51.505, 20],
+  mapInstance.value = map("map", {
+    center: props.center,
     zoom: 17,
-    maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)),
+    maxBounds: latLngBounds(latLng(-90, -180), latLng(90, 180)),
   });
 
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map.value as Map);
-
-  map.value.addEventListener("click", (e) => emit("click", e));
+  }).addTo(mapInstance.value as Map);
 
   applyLeafletZoomFix();
 
@@ -55,21 +73,38 @@ const setupLeafletMap = () => {
 };
 
 const loadMarkers = () => {
-  if (!map.value) return;
-  leafletMarkers.value = markers.value.map((marker) => {
+  const basketballIcon = setupBasketballIcon();
+
+  if (!mapInstance.value) return;
+
+  leafletMarkers.value = markers.value.map((iteratedMarker) => {
     const markerLocation = [
-      marker.location.lat,
-      marker.location.lng,
+      iteratedMarker.location.lat,
+      iteratedMarker.location.lng,
     ] as LatLngTuple;
-    const markerInstance = L.marker(markerLocation);
-    markerInstance.addTo(map.value as Map).bindPopup(marker.title);
+    const markerInstance = marker(markerLocation, {
+      icon: basketballIcon,
+    }) as CustomMarker;
+
+    markerInstance.on("click", (event) => handlePinClick(event));
+
+    markerInstance.addTo(mapInstance.value as Map);
+
+    markerInstance.courtId = iteratedMarker.id;
+
     return markerInstance;
   });
 };
 
+const handlePinClick = (e: PopupEvent) => {
+  const courtId = e.sourceTarget?.courtId;
+  emit("marker-click", courtId);
+  return;
+};
+
 const deleteMarkers = () => {
   leafletMarkers.value.forEach((marker) =>
-    map.value?.removeLayer(marker as any)
+    mapInstance.value?.removeLayer(marker as any)
   );
   leafletMarkers.value = [];
 };

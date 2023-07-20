@@ -1,4 +1,5 @@
 type Court = {
+  _id: string;
   name: string;
   description: string;
   location: {

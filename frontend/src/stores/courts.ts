@@ -11,6 +11,7 @@ type Court = {
     lng: number;
   };
   readableAddress: string;
+  id: string;
 };
 
 export const useCourtsStore = defineStore("courts", () => {
@@ -19,8 +20,7 @@ export const useCourtsStore = defineStore("courts", () => {
   const readonlyCourts = computed(() => courts.value);
   const readonlyMapDataCourts = computed(() =>
     courts.value.map((court) => ({
-      title: court.name,
-      text: court.description,
+      id: court.id,
       location: court.location,
     }))
   );
@@ -60,6 +60,7 @@ export const useCourtsStore = defineStore("courts", () => {
       location: court.location,
       readableAddress: court.readable_address,
       courtType: court.court_type,
+      id: court._id,
     }));
 
     setCourts(mappedData);

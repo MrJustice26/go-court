@@ -1,6 +1,7 @@
 import {
   GET_COURTS_BY_NAME_URL,
   GET_COURTS_URL,
+  GET_COURT_BY_ID,
   GET_LOCATIONS_BY_ADDRESS_QUERY_URL,
   GET_READABLE_ADDRESS_BY_LOCATION_URL,
 } from "@/constants/rest-endpoints";
@@ -31,6 +32,10 @@ export class FetchService {
 
   async getCourtsByName(name: string) {
     return await this.fetchHelper<Court[]>(GET_COURTS_BY_NAME_URL(name));
+  }
+
+  async getCourtById(id: string) {
+    return await this.fetchHelper<Court>(GET_COURT_BY_ID(id));
   }
 
   async getReadableAddressByLocation(lat: number, lng: number) {

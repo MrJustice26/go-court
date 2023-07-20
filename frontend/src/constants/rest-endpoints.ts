@@ -4,6 +4,9 @@ export const GET_COURTS_URL = `${BACKEND_BASE_URL}/courts`;
 export const GET_COURTS_BY_NAME_URL = (name: string) =>
   `${BACKEND_BASE_URL}/courts?name=${name}`;
 
+export const GET_COURT_BY_ID = (courtId: string) =>
+  `${BACKEND_BASE_URL}/courts/${courtId}`;
+
 export const GET_READABLE_ADDRESS_BY_LOCATION_URL = (
   lat: number,
   lng: number

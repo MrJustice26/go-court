@@ -1,35 +1,49 @@
 <template>
-  <div class="h-[calc(100vh-52px)] flex">
-    <HomeSidebar class="w-1/2" />
-    <BaseLeafletMap
+  <div
+    class="h-[calc(100vh-52px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
+  >
+    <CourtInfo
+      v-if="route.query?.court"
+      class="w-full md:w-3/6 lg:w-2/6"
+      :court-id="(route.query?.court as string)"
+    />
+    <CourtFindPanel class="w-full md:w-3/6 lg:w-2/6" v-else />
+
+    <HomeLeafletMap
       :markers="courtsStore.readonlyMapDataCourts"
       :center="mapStore.mapCenterLocation"
-      class="w-1/2"
+      class="w-full h-[300px] md:h-full md:w-3/6 lg:w-4/6"
+      @marker-click="handleMarkerClick"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import BaseLeafletMap from "@/components/base/BaseLeafletMap.vue";
-import HomeSidebar from "@/components/home/TheSidebar.vue";
+import HomeLeafletMap from "@/components/home/LeafletMap.vue";
+import CourtFindPanel from "@/components/home/CourtFindPanel.vue";
+import CourtInfo from "@/components/home/CourtInfo.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
 import { type Court } from "@/types";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
 
 const courtsStore = useCourtsStore();
 const mapStore = useMapStore();
 
 const userLocationStore = useUserLocationStore();
-
 const fetchCourts = async () => {
   const data = await fetchService.getCourts();
   if (!data) {
     return;
   }
   const mappedData = data.map((court: Court) => ({
+    id: court._id,
     name: court.name,
     description: court.description,
     location: court.location,
@@ -46,6 +60,10 @@ onMounted(() => {
       userLocationStore.readonlyUserLocation.location;
   }
 });
+
+const handleMarkerClick = (courtId: string) => {
+  router.push({ query: { court: courtId } });
+};
 
 fetchCourts();
 </script>

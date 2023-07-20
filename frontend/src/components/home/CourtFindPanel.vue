@@ -1,5 +1,5 @@
 <template>
-  <aside class="p-5 dark:bg-zinc-700">
+  <div class="p-5 dark:bg-zinc-700">
     <h1 class="text-3xl font-medium text-center mb-5 dark:text-white">
       Find your court
     </h1>
@@ -21,7 +21,7 @@
         />
       </li>
     </ul>
-  </aside>
+  </div>
 </template>
 
 <script setup lang="ts">
