@@ -2,14 +2,12 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import router from "./router";
 
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { LaLocationArrowSolid, IoLocationSharp, GiPathDistance } from "oh-vue-icons/icons";
 
-addIcons(LaLocationArrowSolid, IoLocationSharp, GiPathDistance);
 
 import "./index.css";
 import "leaflet/dist/leaflet.css";
 import App from "./App.vue";
+import { OhVueIcon } from "./vue-icons";
 
 const pinia = createPinia();
 
