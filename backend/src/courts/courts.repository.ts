@@ -17,6 +17,10 @@ export class CourtsRepository {
     return this.courtModel.find(courtFilterQuery);
   }
 
+  async findById(id: string): Promise<Court> {
+    return this.courtModel.findById(id);
+  }
+
   async create(court: Court): Promise<Court> {
     const newCourt = new this.courtModel(court);
     return newCourt.save();

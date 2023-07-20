@@ -12,19 +12,20 @@ import { UpdateCourtDto } from './dto/update-court.dto';
 
 import { Court } from './schemas/court.schema';
 import { CourtsService } from './courts.service';
+import { GetCourtByNameDto } from './dto/get-court-by-name.dto';
 
 @Controller('courts')
 export class CourtsControlller {
-  constructor(private readonly courtsService: CourtsService) {}
+  constructor(private readonly courtsService: CourtsService) { }
 
   @Get(':courtId')
-  async getUser(@Param('courtId') courtId: string): Promise<Court> {
-    return this.courtsService.getCourtById(courtId);
+  async getUser(@Param('courtId') id: string): Promise<Court> {
+    return this.courtsService.getCourtById(id);
   }
 
   @Get()
-  async getCourts(@Query() query): Promise<Court[]> {
-    return this.courtsService.getCourts(query?.name);
+  async getCourts(@Query() getCourtBy: GetCourtByNameDto): Promise<Court[]> {
+    return this.courtsService.getCourts(getCourtBy);
   }
 
   @Post('create')

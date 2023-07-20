@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { GetCourtByNameDto } from './dto/get-court-by-name.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CourtsRepository } from './courts.repository';
 import { Court } from './schemas/court.schema';
 import { UpdateCourtDto } from './dto/update-court.dto';
@@ -12,14 +13,29 @@ export class CourtsService {
     private readonly nominatimService: NominatimService,
   ) {}
 
-  async getCourtById(courtId: string): Promise<Court> {
-    return this.courtsRepository.findOne({ _id: courtId });
+  async getCourtById(id: string): Promise<Court> {
+    if (!id || typeof id !== 'string') {
+      throw new BadRequestException('Property id should be a string');
+    }
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BadRequestException('Property id is invalid');
+    }
+    const idWithoutDoubleQuotes = id.replace(/['"]+/g, '');
+    const result = await this.courtsRepository.findById(idWithoutDoubleQuotes);
+    if (!result) {
+      throw new BadRequestException('Property id is invalid');
+    }
+    return result;
   }
 
-  async getCourts(name?: string): Promise<Court[]> {
+  async getCourts(getCourtBy: GetCourtByNameDto): Promise<Court[]> {
+    const { name } = getCourtBy;
+
     if (!name) {
       return this.courtsRepository.find({});
     }
+
     const nameWithoutDoubleQuotes = name.replace(/['"]+/g, '');
     return this.courtsRepository.find({
       name: { $regex: nameWithoutDoubleQuotes, $options: 'i' },
