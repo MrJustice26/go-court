@@ -1,7 +1,6 @@
 <template>
-  <button
+  <div
     class="w-full flex items-start gap-x-2 border dark:border-zinc-500 dark:hover:bg-zinc-600 py-4 px-3 rounded-md hover:shadow-md transition-colors"
-    @click="$emit('click', props)"
   >
     <a
       :href="computedGeneratePathLink"
@@ -30,7 +29,7 @@
         {{ address }}</span
       >
     </div>
-  </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +42,6 @@ type HomeCourtCardProps = {
   name: string;
   address: string;
   location: { lat: number; lng: number };
-  id: string;
 };
 const props = defineProps<HomeCourtCardProps>();
 
@@ -52,8 +50,6 @@ const { readonlyUserLocation } = storeToRefs(userLocationStore);
 const computedGeneratePathLink = computed(() =>
   generatePathLink(readonlyUserLocation.value.location, props.location)
 );
-
-defineEmits(["click"]);
 
 const computedLocation = computed(() => props.location);
 

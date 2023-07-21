@@ -13,13 +13,17 @@
     <HomeCourtSearchBar placeholder="Orlik im. Jay-Z" class="mb-5" />
     <ul>
       <li v-for="court in courtsStore.readonlyCourts" class="mb-2">
-        <HomeCourtCard
-          :name="court.name"
-          :address="court.readableAddress"
-          :location="court.location"
-          :id="court.id"
-          @click="handleCourtCardClick"
-        />
+        <RouterLink
+          :to="`?court=${court.id}`"
+          @click.stop="handleCourtCardClick(court)"
+        >
+          <HomeCourtCard
+            :name="court.name"
+            :address="court.readableAddress"
+            :location="court.location"
+            @click="handleCourtCardClick"
+          />
+        </RouterLink>
       </li>
     </ul>
   </div>
@@ -34,11 +38,11 @@ import HomeUserLocationSearchBar from "./UserLocationSearchBar.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
 const courtsStore = useCourtsStore();
 const mapStore = useMapStore();
 
 const handleCourtCardClick = (court: any) => {
+  if (!court?.location) return;
   mapStore.mapCenterLocation = court?.location;
   router.push({ query: { court: court?.id } });
 };
