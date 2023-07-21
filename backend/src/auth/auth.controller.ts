@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dot';
+import { AuthDto } from './dto/auth.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
@@ -16,7 +16,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
