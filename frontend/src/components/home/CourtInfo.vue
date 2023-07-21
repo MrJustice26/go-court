@@ -16,7 +16,7 @@
     <div v-if="isFetching">
       <LoadingGradient class="h-[300px] mb-10 rounded-md" />
       <LoadingGradient class="h-12 mb-3 rounded-md" />
-      <LoadingGradient class="h-[50vh] rounded-md" />
+      <LoadingGradient class="h-12 rounded-md" />
     </div>
     <div v-else>
       <div class="relative mb-10">
