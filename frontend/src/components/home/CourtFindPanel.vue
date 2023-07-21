@@ -17,6 +17,7 @@
           :name="court.name"
           :address="court.readableAddress"
           :location="court.location"
+          :id="court.id"
           @click="handleCourtCardClick"
         />
       </li>
@@ -30,11 +31,15 @@ import { useCourtsStore } from "@/stores/courts";
 import HomeCourtCard from "./CourtCard.vue";
 import HomeCourtSearchBar from "./CourtSearchBar.vue";
 import HomeUserLocationSearchBar from "./UserLocationSearchBar.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const courtsStore = useCourtsStore();
 const mapStore = useMapStore();
 
-const handleCourtCardClick = (location: { lat: number; lng: number }) => {
-  mapStore.mapCenterLocation = location;
+const handleCourtCardClick = (court: any) => {
+  mapStore.mapCenterLocation = court?.location;
+  router.push({ query: { court: court?.id } });
 };
 </script>
