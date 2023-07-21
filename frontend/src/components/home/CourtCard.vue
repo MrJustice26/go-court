@@ -38,13 +38,14 @@ import { computed } from "vue";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { storeToRefs } from "pinia";
 import { generatePathLink } from "@/utils/generate-path-link";
-type HomeCourtCard = {
+
+type HomeCourtCardProps = {
   name: string;
   address: string;
   location: { lat: number; lng: number };
   id: string;
 };
-const props = defineProps<HomeCourtCard>();
+const props = defineProps<HomeCourtCardProps>();
 
 const userLocationStore = useUserLocationStore();
 const { readonlyUserLocation } = storeToRefs(userLocationStore);

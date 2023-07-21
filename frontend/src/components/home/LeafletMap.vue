@@ -27,14 +27,14 @@ type Marker = {
   };
 };
 
-type BaseLeafletMap = {
+type HomeLeafletMapProps = {
   markers: Marker[];
   center: { lat: number; lng: number };
 };
 
 type CustomMarker = L.Marker & { courtId: string };
 
-const props = defineProps<BaseLeafletMap>();
+const props = defineProps<HomeLeafletMapProps>();
 const mapInstance = ref<null | L.Map>(null);
 const markers = computed(() => props.markers);
 const leafletMarkers = ref<L.Marker<any>[]>([]);

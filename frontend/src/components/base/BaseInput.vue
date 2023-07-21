@@ -9,10 +9,10 @@
 </template>
 
 <script setup lang="ts">
-type BaseInput = {
+type BaseInputProps = {
   modelValue?: string;
 };
 
-defineProps<BaseInput>();
+defineProps<BaseInputProps>();
 defineEmits(["update:modelValue"]);
 </script>
