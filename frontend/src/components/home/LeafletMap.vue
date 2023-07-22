@@ -1,5 +1,7 @@
 <template>
-  <div id="map"></div>
+  <div :class="themeClassNames">
+    <div id="map" class="w-full h-full"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -20,6 +22,12 @@ import applyLeafletZoomFix from "@/utils/apply-leaflet-zoom-fix";
 import { markerIconsResolver } from "@/utils/leaflet-icons-loader";
 import { GeoPoint } from "@/types";
 import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/map-center";
+import useTheme from "@/composables/useTheme";
+
+const theme = useTheme();
+const themeClassNames = computed(() => {
+  return theme.value === "dark" ? "dark" : "";
+});
 
 type Marker = {
   id: string;
@@ -122,16 +130,25 @@ onMounted(() => {
 </script>
 
 <style>
-@media (prefers-color-scheme: dark) {
-  .leaflet-layer,
-  .leaflet-control-zoom-in,
-  .leaflet-control-zoom-out {
-    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-  }
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  transition: filter 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  .leaflet-control-attribution {
-    background-color: rgb(24 24 27) !important;
-    color: white !important;
-  }
+.leaflet-control-attribution {
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .leaflet-layer,
+.dark .leaflet-control-zoom-in,
+.dark .leaflet-control-zoom-out {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.dark .leaflet-control-attribution {
+  background-color: rgb(24 24 27) !important;
+  color: white !important;
 }
 </style>

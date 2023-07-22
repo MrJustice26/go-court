@@ -102,7 +102,7 @@ watch(delayedSearchInput, () => {
 
 watch(readonlyUserLocation, (newLocation) => {
   searchInput.value = newLocation.readableAddress;
-  mapStore.mapCenterLocation = newLocation.location;
+  mapStore.mapCenterLocation = newLocation.location as GeoPoint;
   disableFetch.value = true;
 });
 

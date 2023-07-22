@@ -1,32 +1,39 @@
 <template>
-  <div class="p-5 relative">
-    <RouterLink
-      to="/"
-      :class="isFetching && 'bg-zinc-900'"
-      class="absolute top-6 left-6 p-2 rounded-md bg-zinc-500 hover:bg-zinc-700 transition-colors z-[1]"
-    >
-      <v-icon name="bi-arrow-left-short" scale="2" />
-    </RouterLink>
-    <button
-      :class="isFetching && 'bg-zinc-900'"
-      class="absolute top-6 right-6 p-2 rounded-md bg-zinc-500 hover:bg-zinc-700 transition-colors z-[1]"
-    >
-      <v-icon name="bi-star" scale="2" class="fill-white" />
-    </button>
+  <div class="p-5">
     <div v-if="isFetching">
+      <LoadingGradient class="h-12 mb-3 rounded-md" />
       <LoadingGradient class="h-[300px] mb-10 rounded-md" />
       <LoadingGradient class="h-12 mb-3 rounded-md" />
       <LoadingGradient class="h-12 rounded-md" />
     </div>
     <div v-else>
-      <div class="relative mb-10">
-        <img src="https://placehold.co/600x400" class="rounded-t-md" />
-        <p
-          class="absolute bottom-0 left-0 p-3 bg-zinc-800 w-full text-lg max-w-[600px]"
-        >
-          {{ courtData?.readable_address }}
+      <div class="py-3 flex justify-between items-end">
+        <a :href="computedGeneratePathLink">
+          <v-icon name="io-location-sharp" scale="1.5" />
+          <span class="underline">
+            {{ courtData?.readable_address }}
+          </span>
+        </a>
+        <p>
+          {{ computedDistance }}
         </p>
       </div>
+      <div class="flex justify-between">
+        <RouterLink
+          to="/"
+          :class="isFetching && 'bg-gray-400 dark:bg-zinc-900'"
+          class="p-2 rounded-md transition-transform hover:-translate-x-1 z-[1]"
+        >
+          <v-icon name="bi-arrow-left-short" scale="2" />
+        </RouterLink>
+        <button
+          :class="isFetching && 'bg-gray-400 dark:bg-zinc-900'"
+          class="p-2 rounded-md transition-transform hover:scale-105 z-[1]"
+        >
+          <v-icon name="bi-star" scale="2" class="dark:fill-white fill-black" />
+        </button>
+      </div>
+      <img src="https://placehold.co/600x400" class="rounded-t-md mb-10" />
       <h1 class="text-3xl text-center mb-3">{{ courtData?.name }}</h1>
       <div class="text-base" v-html="courtData?.description"></div>
     </div>
@@ -36,9 +43,15 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import fetchService from "@/services/fetch.service";
-import { toRefs, ref, watch, onMounted } from "vue";
-import { CourtFromAPI } from "@/types";
+import { toRefs, ref, watch, onMounted, computed } from "vue";
+import { CourtFromAPI, GeoPoint } from "@/types";
 import LoadingGradient from "@/components/base/LoadingGradient.vue";
+import { useUserLocationStore } from "@/stores/userLocation";
+import { storeToRefs } from "pinia";
+import { generatePathLink } from "@/utils/generate-path-link";
+
+const userLocationStore = useUserLocationStore();
+const { readonlyUserLocation } = storeToRefs(userLocationStore);
 
 type HomeCourtInfoProps = {
   courtId: string;
@@ -68,6 +81,24 @@ const loadCourtData = async () => {
 
 watch(courtId, async () => {
   await loadCourtData();
+});
+
+const computedGeneratePathLink = computed(() => {
+  if (!readonlyUserLocation.value.location || !courtData.value?.location) {
+    return "Unknown";
+  }
+  return generatePathLink(
+    readonlyUserLocation.value.location,
+    courtData.value?.location as GeoPoint
+  );
+});
+
+const computedDistance = computed(() => {
+  if (!courtData.value?.location) return null;
+  return userLocationStore.getRelativeDistance(
+    courtData.value?.location as GeoPoint,
+    true
+  );
 });
 
 onMounted(async () => {
