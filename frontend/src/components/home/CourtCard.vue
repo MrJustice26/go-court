@@ -4,6 +4,7 @@
   >
     <a
       :href="computedGeneratePathLink"
+      v-if="userLocationStore.readonlyUserLocation.location"
       target="_blank"
       @click.stop
       class="min-w-[75px] max-w-[75px] px-2 py-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-color inline-flex flex-col gap-y-1 items-center"
@@ -48,9 +49,12 @@ const props = defineProps<HomeCourtCardProps>();
 
 const userLocationStore = useUserLocationStore();
 const { readonlyUserLocation } = storeToRefs(userLocationStore);
-const computedGeneratePathLink = computed(() =>
-  generatePathLink(readonlyUserLocation.value.location, props.location)
-);
+const computedGeneratePathLink = computed(() => {
+  if (!readonlyUserLocation.value.location) {
+    return "Unknown";
+  }
+  return generatePathLink(readonlyUserLocation.value.location, props.location);
+});
 
 const computedLocation = computed(() => props.location);
 

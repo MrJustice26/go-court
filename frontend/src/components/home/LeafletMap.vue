@@ -19,6 +19,7 @@ import {
 import applyLeafletZoomFix from "@/utils/apply-leaflet-zoom-fix";
 import { markerIconsResolver } from "@/utils/leaflet-icons-loader";
 import { GeoPoint } from "@/types";
+import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/map-center";
 
 type Marker = {
   id: string;
@@ -27,7 +28,8 @@ type Marker = {
 
 type HomeLeafletMapProps = {
   markers: Marker[];
-  center: GeoPoint;
+  center: GeoPoint | null;
+  userLocation: GeoPoint | null;
 };
 
 type CustomMarker = L.Marker & { courtId: string };
@@ -46,16 +48,16 @@ watch(computedCenter, () => {
   mapInstance.value.setView(new LatLng(props.center.lat, props.center.lng), 17);
 });
 
-const setupBasketballIcon = () => {
+const setIcon = (iconName: keyof typeof markerIconsResolver) => {
   return icon({
-    iconUrl: markerIconsResolver["basketball"],
+    iconUrl: markerIconsResolver[iconName],
     iconSize: [40, 40],
   });
 };
 
 const setupLeafletMap = () => {
   mapInstance.value = map("map", {
-    center: props.center,
+    center: props.center || DEFAULT_MAP_CENTER_COORDINATES,
     zoom: 17,
     maxBounds: latLngBounds(latLng(-90, -180), latLng(90, 180)),
   });
@@ -71,7 +73,7 @@ const setupLeafletMap = () => {
 };
 
 const loadMarkers = () => {
-  const basketballIcon = setupBasketballIcon();
+  const basketballIcon = setIcon("basketball");
 
   if (!mapInstance.value) return;
 

@@ -4,26 +4,20 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 type UserLocation = {
-  location: GeoPoint;
+  location: GeoPoint | null;
   readableAddress: string;
 };
 
 export const useUserLocationStore = defineStore("user-location", () => {
   const userLocation = ref<UserLocation>({
-    location: {
-      lat: 0,
-      lng: 0,
-    },
+    location: null,
     readableAddress: "",
   });
 
   const isUserLocationNotChosen = computed(() => {
-    if (!userLocation.value.location.lat || !userLocation.value.location.lng)
+    if (!userLocation.value.location?.lat || !userLocation.value.location?.lng)
       return false;
-    return (
-      userLocation.value.location.lat === 0 &&
-      userLocation.value.location.lng === 0
-    );
+    return true;
   });
 
   const setUserLocation = async (location: UserLocation) => {
@@ -37,6 +31,9 @@ export const useUserLocationStore = defineStore("user-location", () => {
     objectLocation: GeoPoint,
     shouldFormat?: boolean
   ) => {
+    if (!userLocation.value.location) {
+      return "unknown"
+    }
     return distance(userLocation.value.location, objectLocation, shouldFormat);
   };
 

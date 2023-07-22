@@ -1,21 +1,10 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import fetchService from "@/services/fetch.service";
-
-type Court = {
-  name: string;
-  description: string;
-  courtType: string;
-  location: {
-    lat: number;
-    lng: number;
-  };
-  readableAddress: string;
-  id: string;
-};
+import { MappedCourt } from "@/types";
 
 export const useCourtsStore = defineStore("courts", () => {
-  const courts = ref<Court[]>([]);
+  const courts = ref<MappedCourt[]>([]);
 
   const readonlyCourts = computed(() => courts.value);
   const readonlyMapDataCourts = computed(() =>
@@ -43,7 +32,7 @@ export const useCourtsStore = defineStore("courts", () => {
     };
   };
 
-  const setCourts = (desiredCourts: Court[]) => {
+  const setCourts = (desiredCourts: MappedCourt[]) => {
     courts.value = desiredCourts;
   };
 

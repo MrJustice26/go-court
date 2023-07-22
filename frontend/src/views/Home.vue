@@ -12,6 +12,7 @@
     <HomeLeafletMap
       :markers="courtsStore.readonlyMapDataCourts"
       :center="mapStore.mapCenterLocation"
+      :user-location="userLocationStore.readonlyUserLocation.location"
       class="w-full h-[300px] md:h-full md:w-3/6 lg:w-4/6"
       @marker-click="handleMarkerClick"
     />
@@ -27,7 +28,7 @@ import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
-import { MappedCourt, CourtFromAPI } from "@/types";
+import { MappedCourt, CourtFromAPI, GeoPoint } from "@/types";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
@@ -35,8 +36,8 @@ const route = useRoute();
 
 const courtsStore = useCourtsStore();
 const mapStore = useMapStore();
-
 const userLocationStore = useUserLocationStore();
+
 const fetchCourts = async () => {
   const data = await fetchService.getCourts();
   if (!data) {
@@ -55,9 +56,9 @@ const fetchCourts = async () => {
 };
 
 onMounted(() => {
-  if (!userLocationStore.isUserLocationNotChosen) {
-    mapStore.mapCenterLocation =
-      userLocationStore.readonlyUserLocation.location;
+  if (!userLocationStore.readonlyUserLocation?.location) {
+    mapStore.mapCenterLocation = userLocationStore.readonlyUserLocation
+      .location as GeoPoint;
   }
 });
 
