@@ -17,19 +17,17 @@ import {
   PopupEvent,
 } from "leaflet";
 import applyLeafletZoomFix from "@/utils/apply-leaflet-zoom-fix";
+import { markerIconsResolver } from "@/utils/leaflet-icons-loader";
+import { GeoPoint } from "@/types";
 
-// TODO Move all common types to shared types folder
 type Marker = {
   id: string;
-  location: {
-    lat: number;
-    lng: number;
-  };
+  location: GeoPoint;
 };
 
 type HomeLeafletMapProps = {
   markers: Marker[];
-  center: { lat: number; lng: number };
+  center: GeoPoint;
 };
 
 type CustomMarker = L.Marker & { courtId: string };
@@ -50,7 +48,7 @@ watch(computedCenter, () => {
 
 const setupBasketballIcon = () => {
   return icon({
-    iconUrl: "../../src/assets/basketball.png",
+    iconUrl: markerIconsResolver["basketball"],
     iconSize: [40, 40],
   });
 };
@@ -135,4 +133,3 @@ onMounted(() => {
   }
 }
 </style>
-@/utils/apply-leaflet-zoom-fix

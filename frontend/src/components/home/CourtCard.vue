@@ -37,11 +37,12 @@ import { computed } from "vue";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { storeToRefs } from "pinia";
 import { generatePathLink } from "@/utils/generate-path-link";
+import { GeoPoint } from "@/types";
 
 type HomeCourtCardProps = {
   name: string;
   address: string;
-  location: { lat: number; lng: number };
+  location: GeoPoint;
 };
 const props = defineProps<HomeCourtCardProps>();
 

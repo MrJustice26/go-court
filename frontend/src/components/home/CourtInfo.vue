@@ -37,7 +37,7 @@
 import { useRouter } from "vue-router";
 import fetchService from "@/services/fetch.service";
 import { toRefs, ref, watch, onMounted } from "vue";
-import { Court } from "@/types";
+import { CourtFromAPI } from "@/types";
 import LoadingGradient from "@/components/base/LoadingGradient.vue";
 
 type HomeCourtInfoProps = {
@@ -46,7 +46,7 @@ type HomeCourtInfoProps = {
 
 const props = defineProps<HomeCourtInfoProps>();
 const { courtId } = toRefs(props);
-const courtData = ref<Court | null>(null);
+const courtData = ref<CourtFromAPI | null>(null);
 const isFetching = ref(true);
 
 const router = useRouter();

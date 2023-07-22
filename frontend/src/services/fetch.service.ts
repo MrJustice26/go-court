@@ -6,7 +6,7 @@ import {
   GET_READABLE_ADDRESS_BY_LOCATION_URL,
 } from "@/constants/rest-endpoints";
 import { useFetch } from "@vueuse/core";
-import { Court } from "@/types";
+import { CourtFromAPI, GeoPoint } from "@/types";
 import { NominatimSearchResult } from "@/types/api";
 import { NominatimReadableAddressResult } from "@/types/api/nominatim";
 
@@ -27,20 +27,20 @@ export class FetchService {
   }
 
   async getCourts() {
-    return await this.fetchHelper<Court[]>(GET_COURTS_URL);
+    return await this.fetchHelper<CourtFromAPI[]>(GET_COURTS_URL);
   }
 
   async getCourtsByName(name: string) {
-    return await this.fetchHelper<Court[]>(GET_COURTS_BY_NAME_URL(name));
+    return await this.fetchHelper<CourtFromAPI[]>(GET_COURTS_BY_NAME_URL(name));
   }
 
   async getCourtById(id: string) {
-    return await this.fetchHelper<Court>(GET_COURT_BY_ID(id));
+    return await this.fetchHelper<CourtFromAPI>(GET_COURT_BY_ID(id));
   }
 
-  async getReadableAddressByLocation(lat: number, lng: number) {
+  async getReadableAddressByLocation(geoPoint: GeoPoint) {
     return await this.fetchHelper<NominatimReadableAddressResult>(
-      GET_READABLE_ADDRESS_BY_LOCATION_URL(lat, lng)
+      GET_READABLE_ADDRESS_BY_LOCATION_URL(geoPoint)
     );
   }
 

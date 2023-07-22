@@ -27,7 +27,7 @@ import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
-import { type Court } from "@/types";
+import { MappedCourt, CourtFromAPI } from "@/types";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
@@ -42,7 +42,7 @@ const fetchCourts = async () => {
   if (!data) {
     return;
   }
-  const mappedData = data.map((court: Court) => ({
+  const mappedData: MappedCourt[] = data.map((court: CourtFromAPI) => ({
     id: court._id,
     name: court.name,
     description: court.description,

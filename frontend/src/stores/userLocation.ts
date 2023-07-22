@@ -1,14 +1,10 @@
+import { GeoPoint } from "@/types";
 import { distance } from "@/utils/distance";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-type Location = {
-  lat: number;
-  lng: number;
-};
-
 type UserLocation = {
-  location: Location;
+  location: GeoPoint;
   readableAddress: string;
 };
 
@@ -38,7 +34,7 @@ export const useUserLocationStore = defineStore("user-location", () => {
   const readonlyUserLocation = computed(() => userLocation.value);
 
   const getRelativeDistance = (
-    objectLocation: Location,
+    objectLocation: GeoPoint,
     shouldFormat?: boolean
   ) => {
     return distance(userLocation.value.location, objectLocation, shouldFormat);

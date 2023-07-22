@@ -1,7 +1,4 @@
-type Location = {
-  lat: number;
-  lng: number;
-};
+import { GeoPoint } from "@/types";
 
 const formatDistance = (distanceInKM: number) => {
   if (distanceInKM < 1) {
@@ -16,8 +13,8 @@ const formatDistance = (distanceInKM: number) => {
 };
 
 export const distance = (
-  from: Location,
-  to: Location,
+  from: GeoPoint,
+  to: GeoPoint,
   shouldFormat?: boolean
 ) => {
   const fromLng = (from.lng * Math.PI) / 180;

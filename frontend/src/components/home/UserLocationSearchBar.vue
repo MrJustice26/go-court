@@ -49,6 +49,7 @@ import fetchService from "@/services/fetch.service";
 import { NominatimSearchResult } from "@/types";
 import { storeToRefs } from "pinia";
 import { useMapStore } from "@/stores/map";
+import { GeoPoint } from "@/types";
 
 const mapStore = useMapStore();
 const userLocationStore = useUserLocationStore();
@@ -56,10 +57,7 @@ const { readonlyUserLocation } = storeToRefs(userLocationStore);
 
 type Location = {
   display_name: string;
-  address: {
-    lat: number;
-    lng: number;
-  };
+  address: GeoPoint;
 };
 
 const searchInput = ref("");

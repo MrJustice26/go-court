@@ -1,4 +1,4 @@
-type Court = {
+export type CourtFromAPI = {
   _id: string;
   name: string;
   description: string;
@@ -11,4 +11,3 @@ type Court = {
   [key: string]: any;
 };
 
-export { Court };
