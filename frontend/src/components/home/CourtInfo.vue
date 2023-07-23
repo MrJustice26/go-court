@@ -1,8 +1,26 @@
 <template>
   <div class="p-5">
-    <RouterLink to="/" class="py-2 rounded-md mb-3 inline-block">
-      <v-icon name="bi-arrow-left" scale="2" />
-    </RouterLink>
+    <div class="flex justify-between items-center mb-5">
+      <RouterLink
+        to="/"
+        class="p-2 rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-500 inline-block"
+      >
+        <v-icon name="bi-arrow-left" scale="2" />
+      </RouterLink>
+      <p class="text-2xl" v-if="courtData">
+        {{ computedDistance }}
+      </p>
+      <a
+        :href="computedGeneratePathLink"
+        :aria-label="courtData?.readable_address"
+        :title="courtData?.readable_address"
+        target="_blank"
+        class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-500 rounded-md"
+        v-if="courtData"
+      >
+        <v-icon name="gi-path-distance" scale="2" />
+      </a>
+    </div>
     <div v-if="isFetching">
       <LoadingGradient class="h-12 mb-3 rounded-md" />
       <LoadingGradient class="h-[300px] mb-10 rounded-md" />
@@ -10,25 +28,14 @@
       <LoadingGradient class="h-12 rounded-md" />
     </div>
     <div v-else>
-      <div class="py-3 flex justify-between items-end">
-        <a
-          :href="computedGeneratePathLink"
-          class="flex items-end w-4/5"
-          :aria-label="courtData?.readable_address"
-          :title="courtData?.readable_address"
-          target="_blank"
-        >
-          <v-icon name="io-location-sharp" scale="1.5" />
-          <span class="underline line-clamp-1 w-4/5">
-            {{ courtData?.readable_address }}
-          </span>
-        </a>
-        <p>
-          {{ computedDistance }}
-        </p>
-      </div>
-      <img src="https://placehold.co/600x400" class="rounded-t-md mb-10" />
-      <h1 class="text-3xl text-center mb-3">{{ courtData?.name }}</h1>
+      <h1 class="text-3xl mb-5 line-clamp-2" :title="courtData?.name">
+        {{ courtData?.name }}
+      </h1>
+
+      <img src="https://placehold.co/500x250" class="mb-4" />
+      <p class="font-medium mb-10">
+        {{ courtData?.readable_address }}
+      </p>
       <div class="text-base" v-html="courtData?.description"></div>
     </div>
   </div>

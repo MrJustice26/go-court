@@ -4,17 +4,18 @@
   >
     <CourtInfo
       v-if="route.query?.court"
-      class="w-full md:w-3/6 lg:w-2/6"
+      class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12"
       :court-id="(route.query?.court as string)"
     />
-    <CourtFindPanel class="w-full md:w-3/6 lg:w-2/6" v-else />
+    <CourtFindPanel class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12" v-else />
 
     <HomeLeafletMap
       :markers="courtsStore.readonlyMapDataCourts"
       :center="mapStore.mapCenterLocation"
       :user-location="userLocationStore.readonlyUserLocation.location"
-      class="w-full h-[300px] md:h-full md:w-3/6 lg:w-4/6"
+      class="w-full h-[150px] md:h-full md:w-1/2 xl:w-8/12 2xl:w-9/12"
       @marker-click="handleMarkerClick"
+      @show-user-marker="handleShowUserMarkerClick"
     />
   </div>
 </template>
@@ -28,7 +29,7 @@ import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
-import { MappedCourt, CourtFromAPI, GeoPoint } from "@/types";
+import { MappedCourt, CourtFromAPI } from "@/types";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
@@ -57,13 +58,18 @@ const fetchCourts = async () => {
 
 onMounted(() => {
   if (!userLocationStore.readonlyUserLocation?.location) {
-    mapStore.mapCenterLocation = userLocationStore.readonlyUserLocation
-      .location as GeoPoint;
+    return;
   }
+
+  mapStore.mapCenterLocation = userLocationStore.readonlyUserLocation.location;
 });
 
 const handleMarkerClick = (courtId: string) => {
   router.push({ query: { court: courtId } });
+};
+
+const handleShowUserMarkerClick = () => {
+  mapStore.mapCenterLocation = userLocationStore.readonlyUserLocation.location!;
 };
 
 fetchCourts();

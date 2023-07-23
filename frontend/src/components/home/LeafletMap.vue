@@ -1,6 +1,12 @@
 <template>
-  <div :class="themeClassNames">
+  <div :class="themeClassNames" class="relative">
     <div id="map" class="w-full h-full"></div>
+    <button
+      class="absolute bottom-[10px] left-[10px] dark:bg-zinc-900 bg-white hover:dark:bg-zinc-700 hover:bg-zinc-200 z-[1000] p-3 rounded-sm cursor-pointer"
+      @click="setViewOnUserLocation"
+    >
+      <v-icon name="io-location-sharp" scale="1.25" />
+    </button>
   </div>
 </template>
 
@@ -45,9 +51,11 @@ type CustomMarker = L.Marker & { courtId: string };
 const props = defineProps<HomeLeafletMapProps>();
 const mapInstance = ref<null | L.Map>(null);
 const markers = computed(() => props.markers);
-const leafletMarkers = ref<L.Marker<any>[]>([]);
 
-const emit = defineEmits(["marker-click"]);
+const leafletMarkers = ref<L.Marker<any>[]>([]);
+const leafletUserMarker = ref<L.Marker<any> | null>(null);
+
+const emit = defineEmits(["marker-click", "show-user-marker"]);
 
 const computedCenter = computed(() => props.center);
 watch(computedCenter, () => {
@@ -55,6 +63,8 @@ watch(computedCenter, () => {
   if (!props.center || !props.center?.lat || !props.center?.lng) return;
   mapInstance.value.setView(new LatLng(props.center.lat, props.center.lng), 17);
 });
+
+const computedUserLocation = computed(() => props.userLocation);
 
 const setIcon = (iconName: keyof typeof markerIconsResolver) => {
   return icon({
@@ -77,10 +87,11 @@ const setupLeafletMap = () => {
 
   applyLeafletZoomFix();
 
-  loadMarkers();
+  loadCourtsMarkers();
+  loadUserLocationMarker();
 };
 
-const loadMarkers = () => {
+const loadCourtsMarkers = () => {
   const basketballIcon = setIcon("basketball");
 
   if (!mapInstance.value) return;
@@ -104,25 +115,61 @@ const loadMarkers = () => {
   });
 };
 
+const loadUserLocationMarker = () => {
+  if (!mapInstance.value || !computedUserLocation.value) return;
+  const markerInstance = marker(computedUserLocation.value);
+  markerInstance.bindPopup("You are here");
+
+  markerInstance.addTo(mapInstance.value as Map);
+  leafletUserMarker.value = markerInstance;
+};
+const deleteUserLocationMarker = () => {
+  if (!mapInstance.value || !computedUserLocation.value) return;
+  const markerInstance = leafletUserMarker.value;
+  if (!markerInstance) return;
+
+  mapInstance.value.removeLayer(markerInstance as any);
+  leafletUserMarker.value = null;
+};
+const updateUserLocationMarker = () => {
+  deleteUserLocationMarker();
+  loadUserLocationMarker();
+};
+
 const handlePinClick = (e: PopupEvent) => {
   const courtId = e.sourceTarget?.courtId;
   emit("marker-click", courtId);
   return;
 };
 
-const deleteMarkers = () => {
+const deleteCourtsMarkers = () => {
   leafletMarkers.value.forEach((marker) =>
     mapInstance.value?.removeLayer(marker as any)
   );
   leafletMarkers.value = [];
 };
 
-const reRenderMarkers = () => {
-  deleteMarkers();
-  loadMarkers();
+const setViewOnUserLocation = () => {
+  if (!mapInstance.value || !computedUserLocation.value) return;
+  mapInstance.value.setView(
+    new LatLng(
+      computedUserLocation.value?.lat,
+      computedUserLocation.value?.lng
+    ),
+    17
+  );
+  emit("show-user-marker");
 };
 
-watch(markers, () => reRenderMarkers());
+const UpdateCourtsMarkers = () => {
+  deleteCourtsMarkers();
+  loadCourtsMarkers();
+};
+
+watch(markers, () => UpdateCourtsMarkers());
+watch(computedUserLocation, () => {
+  updateUserLocationMarker();
+});
 
 onMounted(() => {
   setupLeafletMap();
