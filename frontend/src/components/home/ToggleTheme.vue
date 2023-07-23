@@ -1,5 +1,8 @@
 <template>
-  <button @click="toggleThemeMode">
+  <button
+    @click="toggleThemeMode"
+    class="hover:bg-zinc-200 dark:hover:bg-zinc-700 py-2 px-2 rounded-md transition-colors"
+  >
     <KeepAlive>
       <Transition mode="out-in" name="theme-transition">
         <v-icon name="bi-moon-stars-fill" v-if="isDarkMode" scale="1.5" />
@@ -27,8 +30,8 @@ watch(isDarkMode, () => {
 <style scoped>
 .theme-transition-enter-active,
 .theme-transition-leave-active {
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s var(--tailwind-animation-duration),
+    opacity 0.15s var(--tailwind-animation-duration);
 }
 
 .theme-transition-leave-to,

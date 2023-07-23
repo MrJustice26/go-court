@@ -133,12 +133,12 @@ onMounted(() => {
 .leaflet-layer,
 .leaflet-control-zoom-in,
 .leaflet-control-zoom-out {
-  transition: filter 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: filter 0.15s var(--tailwind-animation-duration);
 }
 
 .leaflet-control-attribution {
-  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.15s var(--tailwind-animation-duration),
+    color 0.15s var(--tailwind-animation-duration);
 }
 
 .dark .leaflet-layer,
