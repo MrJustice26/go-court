@@ -1,5 +1,5 @@
 <template>
-  <BaseToggle v-model="isChecked" />
+  <BaseToggle v-model="isDarkMode" />
 </template>
 
 <script setup lang="ts">
@@ -7,10 +7,9 @@ import BaseToggle from "@/components/base/BaseToggle.vue";
 import useTheme from "@/composables/useTheme";
 import { ref, watch } from "vue";
 
-const isChecked = ref(false);
 const themeValue = useTheme();
-watch(isChecked, () => {
-  console.log(isChecked.value);
-  themeValue.value = isChecked.value ? "light" : "dark";
+const isDarkMode = ref(themeValue.value === "dark");
+watch(isDarkMode, () => {
+  themeValue.value = isDarkMode.value ? "dark" : "light";
 });
 </script>

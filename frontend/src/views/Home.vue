@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-[calc(100vh-52px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
+    class="h-[calc(100vh-60px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
   >
     <CourtInfo
       v-if="route.query?.court"

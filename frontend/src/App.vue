@@ -1,7 +1,7 @@
 <template>
   <div class="dark:bg-zinc-700 bg-white text-zinc-700 dark:text-white">
     <TheHeader></TheHeader>
-    <main class="min-h-[calc(100vh-52px)]">
+    <main class="min-h-[calc(100vh-60px)]">
       <RouterView></RouterView>
     </main>
   </div>
