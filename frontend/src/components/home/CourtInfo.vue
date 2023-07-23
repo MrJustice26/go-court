@@ -8,9 +8,15 @@
     </div>
     <div v-else>
       <div class="py-3 flex justify-between items-end">
-        <a :href="computedGeneratePathLink">
+        <a
+          :href="computedGeneratePathLink"
+          class="flex items-end w-4/5"
+          :aria-label="courtData?.readable_address"
+          :title="courtData?.readable_address"
+          target="_blank"
+        >
           <v-icon name="io-location-sharp" scale="1.5" />
-          <span class="underline">
+          <span class="underline line-clamp-1 w-4/5">
             {{ courtData?.readable_address }}
           </span>
         </a>

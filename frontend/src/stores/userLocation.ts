@@ -14,7 +14,7 @@ export const useUserLocationStore = defineStore("user-location", () => {
     readableAddress: "",
   });
 
-  const isUserLocationNotChosen = computed(() => {
+  const isUserLocationChosen = computed(() => {
     if (!userLocation.value.location?.lat || !userLocation.value.location?.lng)
       return false;
     return true;
@@ -72,6 +72,6 @@ export const useUserLocationStore = defineStore("user-location", () => {
     readonlyUserLocation,
     getRelativeDistance,
     loadUserLocationData,
-    isUserLocationNotChosen,
+    isUserLocationChosen,
   };
 });

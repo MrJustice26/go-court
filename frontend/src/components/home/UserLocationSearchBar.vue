@@ -1,10 +1,25 @@
 <template>
   <div class="relative" ref="userLocationSearchBar">
-    <BaseInput
-      v-model="searchInput"
-      placeholder="e.g.: Orlik im. Jay-Z"
-      @focus="setListVisibility(true)"
-    />
+    <div class="relative">
+      <BaseInput
+        v-model="searchInput"
+        placeholder="e.g.: Orlik im. Jay-Z"
+        @focus="setListVisibility(true)"
+        class="pr-[60px]"
+      />
+
+      <button
+        class="absolute py-3 px-4 right-[1px] top-[1px] transition-colors border-l rounded-r-md group disabled:cursor-default"
+        aria-label="Get location using geolocation"
+        title="Get location using geolocation"
+      >
+        <v-icon
+          name="fa-location-arrow"
+          scale="1.2"
+          class="group:disabled:fill-emerald-200 fill-emerald-400 group-disabled:dark:fill-zinc-400 transition-colors"
+        />
+      </button>
+    </div>
 
     <div
       class="border rounded-sm absolute w-full bg-white top-[96%] z-10 dark:bg-zinc-700 dark:text-white"

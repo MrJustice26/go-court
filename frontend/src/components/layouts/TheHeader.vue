@@ -1,5 +1,7 @@
 <template>
-  <header class="bg-zinc-900 py-4 px-5 text-white">
+  <header
+    class="dark:bg-zinc-900 py-4 px-5 dark:text-white text-zinc-900 bg-zinc-100"
+  >
     <nav class="flex justify-between">
       <RouterLink to="/" class="text-xl font-bold">Go Court</RouterLink>
       <ToggleTheme />
