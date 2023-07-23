@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-5 pb-5 dark:bg-zinc-700 max-h-[calc(100vh-60px)] overflow-y-auto"
+    class="px-5 pb-5 dark:bg-zinc-700 max-h-[calc(100vh-70px)] overflow-y-auto"
   >
     <div class="sticky top-0 dark:bg-zinc-700 bg-zinc-50 pt-5">
       <h1 class="text-3xl font-medium text-center mb-5 dark:text-white">

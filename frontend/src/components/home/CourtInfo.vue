@@ -1,5 +1,8 @@
 <template>
   <div class="p-5">
+    <RouterLink to="/" class="py-2 rounded-md mb-3 inline-block">
+      <v-icon name="bi-arrow-left" scale="2" />
+    </RouterLink>
     <div v-if="isFetching">
       <LoadingGradient class="h-12 mb-3 rounded-md" />
       <LoadingGradient class="h-[300px] mb-10 rounded-md" />
@@ -23,21 +26,6 @@
         <p>
           {{ computedDistance }}
         </p>
-      </div>
-      <div class="flex justify-between">
-        <RouterLink
-          to="/"
-          :class="isFetching && 'bg-gray-400 dark:bg-zinc-900'"
-          class="p-2 rounded-md transition-transform hover:-translate-x-1 z-[1]"
-        >
-          <v-icon name="bi-arrow-left-short" scale="2" />
-        </RouterLink>
-        <button
-          :class="isFetching && 'bg-gray-400 dark:bg-zinc-900'"
-          class="p-2 rounded-md transition-transform hover:scale-105 z-[1]"
-        >
-          <v-icon name="bi-star" scale="2" class="dark:fill-white fill-black" />
-        </button>
       </div>
       <img src="https://placehold.co/600x400" class="rounded-t-md mb-10" />
       <h1 class="text-3xl text-center mb-3">{{ courtData?.name }}</h1>
