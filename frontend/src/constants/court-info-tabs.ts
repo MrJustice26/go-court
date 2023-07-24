@@ -1,7 +1,7 @@
 export const courtInfoTabs = [
     {
-        text: 'About',
-        value: 'about'
+        text: 'Information',
+        value: 'information'
     },
     {
         text: 'Timeline',

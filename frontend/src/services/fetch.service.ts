@@ -19,7 +19,6 @@ export class FetchService {
 
     const { error, data } = await useFetch<string>(url);
     if (error.value || !data.value) {
-      console.error("Error: ", error.value);
       return null;
     }
 

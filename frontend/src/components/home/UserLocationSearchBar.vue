@@ -1,11 +1,18 @@
 <template>
   <div class="relative" ref="userLocationSearchBar">
+    <label
+      for="location-input"
+      class="font-medium inline-block mb-1 dark:text-white cursor-pointer text-sm"
+    >
+      Your location
+    </label>
     <div class="relative">
       <BaseInput
         v-model="searchInput"
         placeholder="e.g.: Orlik im. Jay-Z"
         @focus="setListVisibility(true)"
         class="pr-[60px]"
+        id="location-input"
       />
 
       <button
@@ -65,6 +72,8 @@ import { NominatimSearchResult } from "@/types";
 import { storeToRefs } from "pinia";
 import { useMapStore } from "@/stores/map";
 import { GeoPoint } from "@/types";
+
+// TODO COnvert this component to smaller pieces
 
 const mapStore = useMapStore();
 const userLocationStore = useUserLocationStore();

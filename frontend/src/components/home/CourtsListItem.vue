@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full max-h-[100px] flex items-start gap-x-2 border dark:border-zinc-500 dark:hover:bg-zinc-600 py-4 px-3 rounded-md hover:shadow-md transition-colors"
+    class="w-full max-h-[100px] border dark:border-zinc-500 dark:hover:bg-zinc-600 py-4 px-3 rounded-md hover:shadow-md transition-colors"
   >
     <div class="w-full text-left">
       <div class="flex justify-between mb-2">

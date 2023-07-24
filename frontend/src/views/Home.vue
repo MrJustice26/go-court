@@ -2,8 +2,10 @@
   <div
     class="h-[calc(100vh-70px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
   >
-    <div class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12">
-      <CourtInfo
+    <div
+      class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12 h-3/4 md:h-full overflow-y-auto"
+    >
+      <CourtDetails
         v-if="route.query?.court"
         :court-id="(route.query?.court as string)"
       />
@@ -14,7 +16,7 @@
       :markers="courtsStore.readonlyMapDataCourts"
       :center="mapStore.mapCenterLocation"
       :user-location="userLocationStore.readonlyUserLocation.location"
-      class="w-full h-[150px] md:h-full md:w-1/2 xl:w-8/12 2xl:w-9/12"
+      class="w-full md:w-1/2 xl:w-8/12 2xl:w-9/12 h-1/4 md:h-full"
       @marker-click="handleMarkerClick"
       @show-user-marker="handleShowUserMarkerClick"
     />
@@ -25,7 +27,7 @@
 import { onMounted } from "vue";
 import HomeLeafletMap from "@/components/home/LeafletMap.vue";
 import CourtFindPanel from "@/components/home/CourtFindPanel.vue";
-import CourtInfo from "@/components/home/CourtInfo.vue";
+import CourtDetails from "@/components/home/CourtDetails.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { useMapStore } from "@/stores/map";
