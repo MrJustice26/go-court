@@ -28,7 +28,9 @@
       <LoadingGradient class="h-12 rounded-md" />
     </div>
     <div v-else>
-      <h1 class="text-3xl mb-5 line-clamp-2" :title="courtData?.name">
+      <BaseTabs :items="courtInfoTabs" v-model="selectedTab" class="mb-10" />
+
+      <h1 class="text-2xl line-clamp-2 mb-2" :title="courtData?.name">
         {{ courtData?.name }}
       </h1>
 
@@ -47,9 +49,19 @@ import fetchService from "@/services/fetch.service";
 import { toRefs, ref, watch, onMounted, computed } from "vue";
 import { CourtFromAPI, GeoPoint } from "@/types";
 import LoadingGradient from "@/components/base/LoadingGradient.vue";
+import BaseTabs from "@/components/base/BaseTabs.vue";
 import { useUserLocationStore } from "@/stores/userLocation";
 import { storeToRefs } from "pinia";
 import { generatePathLink } from "@/utils/generate-path-link";
+import { courtInfoTabs } from "@/constants/court-info-tabs";
+
+// TODO convert to smaller pieces and even make it as view, not component
+// TODO Create timeline (https://flowbite.com/docs/components/timeline/), which will show what is happened
+// For example:
+// 12:50 24.07
+// Game 3x3
+// Looking for a players, who wanna come in?
+// Attend
 
 const userLocationStore = useUserLocationStore();
 const { readonlyUserLocation } = storeToRefs(userLocationStore);
@@ -57,6 +69,8 @@ const { readonlyUserLocation } = storeToRefs(userLocationStore);
 type HomeCourtInfoProps = {
   courtId: string;
 };
+
+const selectedTab = ref(courtInfoTabs[0].value);
 
 const props = defineProps<HomeCourtInfoProps>();
 const { courtId } = toRefs(props);
