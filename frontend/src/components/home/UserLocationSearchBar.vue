@@ -9,7 +9,7 @@
       />
 
       <button
-        class="absolute py-3 px-4 right-[1px] top-[1px] transition-colors border-l rounded-r-md group disabled:cursor-default"
+        class="absolute p-2.5 px-4 right-[1px] top-[1px] transition-colors border-l dark:border-l-zinc-200/30 rounded-r-md group disabled:cursor-default"
         aria-label="Get location using geolocation"
         title="Get location using geolocation"
       >
@@ -22,7 +22,7 @@
     </div>
 
     <div
-      class="border rounded-sm absolute w-full bg-white top-[96%] z-10 dark:bg-zinc-700 dark:text-white"
+      class="border rounded-sm absolute w-full bg-white top-[96%] z-10 dark:bg-zinc-800 dark:text-white"
       v-show="
         isListVisible &&
         isSearchInputEqualsToDelayedSearchInput &&
@@ -39,7 +39,7 @@
           <button
             :title="location.display_name"
             @click="handleLocationCardClick(location)"
-            class="hover:bg-zinc-200 dark:hover:bg-zinc-800 w-full inline-flex p-3 transition-colors whitespace-nowrap"
+            class="hover:bg-zinc-200/30 dark:hover:bg-zinc-700 w-full inline-flex p-3 transition-colors whitespace-nowrap border-b border-b-zinc-200/60 dark:border-b-zinc-200/20"
           >
             {{ location.display_name }}
           </button>

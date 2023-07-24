@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:bg-zinc-700 bg-zinc-50 text-zinc-700 dark:text-white">
+  <div class="dark:bg-zinc-900 bg-zinc-50 text-zinc-700 dark:text-white">
     <TheHeader />
     <main class="min-h-[calc(100vh-70px)]">
       <RouterView></RouterView>

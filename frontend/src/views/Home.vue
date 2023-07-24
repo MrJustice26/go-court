@@ -2,12 +2,13 @@
   <div
     class="h-[calc(100vh-70px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
   >
-    <CourtInfo
-      v-if="route.query?.court"
-      class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12"
-      :court-id="(route.query?.court as string)"
-    />
-    <CourtFindPanel class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12" v-else />
+    <div class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12">
+      <CourtInfo
+        v-if="route.query?.court"
+        :court-id="(route.query?.court as string)"
+      />
+      <CourtFindPanel v-else />
+    </div>
 
     <HomeLeafletMap
       :markers="courtsStore.readonlyMapDataCourts"
