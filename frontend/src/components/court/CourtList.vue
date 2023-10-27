@@ -17,7 +17,8 @@
 import { useCourtsStore } from "@/stores/courts";
 import { useMapStore } from "@/stores/map";
 import { useRouter } from "vue-router";
-import CourtsListItem from "./CourtsListItem.vue";
+import CourtsListItem from "./CourtListItem.vue";
+
 
 const router = useRouter();
 const mapStore = useMapStore();

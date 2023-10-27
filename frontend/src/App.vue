@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:bg-zinc-900 bg-zinc-50 text-zinc-700 dark:text-white">
+  <div class="dark:bg-graphite bg-zinc-50 text-zinc-700 dark:text-white">
     <TheHeader />
     <main class="min-h-[calc(100vh-70px)]">
       <RouterView></RouterView>
@@ -13,7 +13,8 @@ import { useUserLocationStore } from "@/stores/userLocation";
 import { onMounted } from "vue";
 
 onMounted(() => {
-  const useLocationStore = useUserLocationStore();
-  useLocationStore.loadUserLocationData();
+  const userLocationStore = useUserLocationStore();
+  userLocationStore.loadUserLocationData();
 });
+
 </script>

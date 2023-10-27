@@ -3,6 +3,7 @@
     class="h-[calc(100vh-70px)] flex flex-col-reverse items-start md:flex-row justify-end md:justify-normal"
   >
     <div
+      v-show="!createCourtStore.isUserOnCreationStateData"
       class="w-full md:w-1/2 xl:w-4/12 2xl:w-3/12 h-3/4 md:h-full overflow-y-auto"
     >
       <CourtDetails
@@ -16,9 +17,10 @@
       :markers="courtsStore.readonlyMapDataCourts"
       :center="mapStore.mapCenterLocation"
       :user-location="userLocationStore.readonlyUserLocation.location"
-      class="w-full md:w-1/2 xl:w-8/12 2xl:w-9/12 h-1/4 md:h-full"
+      :class="createCourtStore.isUserOnCreationStateData ? 'h-full w-full' : 'w-full md:w-1/2 xl:w-8/12 2xl:w-9/12 h-1/4 md:h-full'"
       @marker-click="handleMarkerClick"
       @show-user-marker="handleShowUserMarkerClick"
+      @map-click="handleClickInMap"
     />
   </div>
 </template>
@@ -26,14 +28,16 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import HomeLeafletMap from "@/components/home/LeafletMap.vue";
-import CourtFindPanel from "@/components/home/CourtFindPanel.vue";
-import CourtDetails from "@/components/home/CourtDetails.vue";
+import CourtFindPanel from "@/components/court/CourtFindPanel.vue";
+import CourtDetails from "@/components/court/CourtDetails.vue";
 import { useCourtsStore } from "@/stores/courts";
 import { useUserLocationStore } from "@/stores/userLocation";
+import { useCreateCourtStore } from "@/stores/createCourt";
 import { useMapStore } from "@/stores/map";
 import fetchService from "@/services/fetch.service";
 import { MappedCourt, CourtFromAPI } from "@/types";
 import { useRoute, useRouter } from "vue-router";
+import { LeafletMouseEvent } from "leaflet";
 
 const router = useRouter();
 const route = useRoute();
@@ -41,6 +45,7 @@ const route = useRoute();
 const courtsStore = useCourtsStore();
 const mapStore = useMapStore();
 const userLocationStore = useUserLocationStore();
+const createCourtStore = useCreateCourtStore();
 
 const fetchCourts = async () => {
   const data = await fetchService.getCourts();
@@ -74,6 +79,17 @@ const handleMarkerClick = (courtId: string) => {
 const handleShowUserMarkerClick = () => {
   mapStore.mapCenterLocation = userLocationStore.readonlyUserLocation.location!;
 };
+
+const handleClickInMap = (e: LeafletMouseEvent) => {
+  if(!createCourtStore.isUserOnCreationStateData) return;
+  createCourtStore.createCourtData = {
+    ...createCourtStore.createCourtData,
+    location: {
+      lat: e.latlng.lat,
+      lng: e.latlng.lng,
+    }
+  };
+} 
 
 fetchCourts();
 </script>

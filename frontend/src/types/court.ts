@@ -11,3 +11,10 @@ export type MappedCourt = {
     readableAddress: string;
     courtType: string;
 }
+
+export type CreateCourt = {
+    name: string;
+    description: string;
+    location: GeoPoint | null;
+    readableAddress: string;
+}

@@ -1,6 +1,6 @@
 <template>
   <div :class="themeClassNames" class="relative">
-    <div id="map" class="w-full h-full"></div>
+    <div :id="id || 'map'" class="w-full h-full" ref="$map"></div>
     <button
       class="absolute bottom-[10px] left-[10px] dark:bg-zinc-900 bg-white hover:dark:bg-zinc-700 hover:bg-zinc-200 z-[1000] p-3 rounded-sm cursor-pointer"
       @click="setViewOnUserLocation"
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch, onUnmounted } from "vue";
 import {
   LatLngTuple,
   Map,
@@ -44,6 +44,7 @@ type HomeLeafletMapProps = {
   markers: Marker[];
   center: GeoPoint | null;
   userLocation: GeoPoint | null;
+  id?: string;
 };
 
 type CustomMarker = L.Marker & { courtId: string };
@@ -55,7 +56,11 @@ const markers = computed(() => props.markers);
 const leafletMarkers = ref<L.Marker<any>[]>([]);
 const leafletUserMarker = ref<L.Marker<any> | null>(null);
 
-const emit = defineEmits(["marker-click", "show-user-marker"]);
+const emit = defineEmits<{
+  "marker-click": [courtId: string],
+  "show-user-marker": [],
+  "map-click": [event: L.LeafletMouseEvent],
+}>();
 
 const computedCenter = computed(() => props.center);
 watch(computedCenter, () => {
@@ -65,6 +70,8 @@ watch(computedCenter, () => {
 });
 
 const computedUserLocation = computed(() => props.userLocation);
+
+const $map = ref<HTMLDivElement | null>(null);
 
 const setIcon = (iconName: keyof typeof markerIconsResolver) => {
   return icon({
@@ -86,9 +93,10 @@ const setupLeafletMap = () => {
   }).addTo(mapInstance.value as Map);
 
   applyLeafletZoomFix();
-
+  registerClickEvent();
   loadCourtsMarkers();
   loadUserLocationMarker();
+  registerResizeObserver();
 };
 
 const loadCourtsMarkers = () => {
@@ -113,6 +121,7 @@ const loadCourtsMarkers = () => {
 
     return markerInstance;
   });
+
 };
 
 const loadUserLocationMarker = () => {
@@ -161,6 +170,26 @@ const setViewOnUserLocation = () => {
   emit("show-user-marker");
 };
 
+const registerClickEvent = () => {
+  if(!mapInstance.value) return;
+
+  mapInstance.value.on('click', (e) => {
+    emit('map-click', e);
+  })
+}
+
+let resizeObserver: null | ResizeObserver = null;
+const registerResizeObserver = () => {
+  console.log($map.value);
+
+  if(!$map.value) return;
+
+  resizeObserver = new ResizeObserver(() => {
+    mapInstance.value?.invalidateSize();
+  });
+
+  resizeObserver.observe($map.value);
+}
 const UpdateCourtsMarkers = () => {
   deleteCourtsMarkers();
   loadCourtsMarkers();
@@ -174,6 +203,11 @@ watch(computedUserLocation, () => {
 onMounted(() => {
   setupLeafletMap();
 });
+
+onUnmounted(() => {
+  if(!resizeObserver) return;
+  resizeObserver.disconnect();
+})
 </script>
 
 <style>
