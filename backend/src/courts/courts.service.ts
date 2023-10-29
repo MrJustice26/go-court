@@ -46,11 +46,8 @@ export class CourtsService {
     name,
     description,
     location,
+    readableAddress
   }: CreateCourtDto): Promise<Court> {
-    const readableAddress = await this.nominatimService.getReadableAddress(
-      location,
-    );
-
     return this.courtsRepository.create({
       name,
       description,

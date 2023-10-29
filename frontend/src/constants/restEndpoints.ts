@@ -18,3 +18,5 @@ export const GET_READABLE_ADDRESS_BY_LOCATION_URL = (geoPoint: GeoPoint) =>
   );
 export const GET_LOCATIONS_BY_ADDRESS_QUERY_URL = (query: string) =>
   PREPARE_BACKEND_URL(`nominatim/search?q=${query}`);
+
+export const CREATE_COURT_URL = PREPARE_BACKEND_URL("courts/create");

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/map-center";
+import { DEFAULT_MAP_CENTER_COORDINATES } from "@/constants/mapCenter";
 import { ref } from "vue";
 
 export const useMapStore = defineStore("map", () => {

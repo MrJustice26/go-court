@@ -66,17 +66,18 @@
 import { ref, onMounted, watch, computed } from "vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import { onClickOutside, useDebounce } from "@vueuse/core";
-import { useUserLocationStore } from "@/stores/userLocation";
 import fetchService from "@/services/fetch.service";
 import { NominatimSearchResult } from "@/types";
 import { storeToRefs } from "pinia";
-import { useMapStore } from "@/stores/map";
+import { useMapStore, useUserLocationStore, useCourtsStore } from "@/stores";
 import { GeoPoint } from "@/types";
 
 // TODO COnvert this component to smaller pieces
 
 const mapStore = useMapStore();
 const userLocationStore = useUserLocationStore();
+const courtsStore = useCourtsStore();
+
 const { readonlyUserLocation } = storeToRefs(userLocationStore);
 
 type Location = {
@@ -148,6 +149,7 @@ const handleLocationCardClick = (location: NominatimSearchResult) => {
     readableAddress: location.display_name,
   };
   userLocationStore.setUserLocation(userLocation);
+  courtsStore.setCourtsMapCenter(location.address)
   setListVisibility(false);
 };
 

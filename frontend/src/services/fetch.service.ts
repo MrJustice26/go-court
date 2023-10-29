@@ -1,53 +1,46 @@
 import {
+  CREATE_COURT_URL,
   GET_COURTS_BY_NAME_URL,
   GET_COURTS_URL,
   GET_COURT_BY_ID,
   GET_LOCATIONS_BY_ADDRESS_QUERY_URL,
   GET_READABLE_ADDRESS_BY_LOCATION_URL,
-} from "@/constants/rest-endpoints";
-import { useFetch } from "@vueuse/core";
-import { CourtFromAPI, GeoPoint } from "@/types";
-import { NominatimSearchResult } from "@/types/api";
-import { NominatimReadableAddressResult } from "@/types/api/nominatim";
+} from "@/constants/restEndpoints";
+import { UseFetchReturn, useFetch } from "@vueuse/core";
+import { CourtFromAPI, CreateCourt, GeoPoint } from "@/types";
+import { NominatimSearchResult } from "@/types/apiResponse";
+import { NominatimReadableAddressResult } from "@/types/apiResponse/nominatim";
 
 export class FetchService {
-  private async fetchHelper<T>(url: string): Promise<T | null> {
-    if (url.startsWith("undefined")) {
-      console.error("Error with importing url", url);
-      return null;
-    }
 
-    const { error, data } = await useFetch<string>(url);
-    if (error.value || !data.value) {
-      return null;
-    }
-
-    return JSON.parse(data.value) as T;
-  }
+  private fetchHelper = async <T>(useFetchCallback: () => UseFetchReturn<T>) => {
+    const {data} = await useFetchCallback().json();
+    return data.value as T;
+  };
 
   async getCourts() {
-    return await this.fetchHelper<CourtFromAPI[]>(GET_COURTS_URL);
+    return await this.fetchHelper<CourtFromAPI[]>(() => useFetch(GET_COURTS_URL));
   }
 
   async getCourtsByName(name: string) {
-    return await this.fetchHelper<CourtFromAPI[]>(GET_COURTS_BY_NAME_URL(name));
+    return await this.fetchHelper<CourtFromAPI[]>(() => useFetch(GET_COURTS_BY_NAME_URL(name)));
   }
 
   async getCourtById(id: string) {
-    return await this.fetchHelper<CourtFromAPI>(GET_COURT_BY_ID(id));
+    return await this.fetchHelper<CourtFromAPI>(() => useFetch(GET_COURT_BY_ID(id)));
   }
 
   async getReadableAddressByLocation(geoPoint: GeoPoint) {
-    return await this.fetchHelper<NominatimReadableAddressResult>(
-      GET_READABLE_ADDRESS_BY_LOCATION_URL(geoPoint)
-    );
+    return await this.fetchHelper<NominatimReadableAddressResult>(() => useFetch(GET_READABLE_ADDRESS_BY_LOCATION_URL(geoPoint)));
   }
 
   async getLocationsByAddressQuery(query: string) {
-    return await this.fetchHelper<NominatimSearchResult[]>(
-      GET_LOCATIONS_BY_ADDRESS_QUERY_URL(query)
-    );
+    return await this.fetchHelper<NominatimSearchResult[]>(() => useFetch(GET_LOCATIONS_BY_ADDRESS_QUERY_URL(query))); 
   }
+
+  async createCourt(courtDto: CreateCourt){
+    return await this.fetchHelper<CourtFromAPI>(() => useFetch<CourtFromAPI>(CREATE_COURT_URL).post(courtDto));
+  };
 }
 
 export default new FetchService();

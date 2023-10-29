@@ -13,4 +13,7 @@ export class CreateCourtDto {
     lat: number;
     lng: number;
   };
+
+  @IsNotEmpty()
+  readableAddress: string;
 }

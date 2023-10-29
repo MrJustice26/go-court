@@ -7,13 +7,8 @@
       <HomeUserLocationSearchBar class="mb-10" />
       <HomeCourtSearchBar placeholder="Orlik im. Jay-Z" class="mb-5" />
     </div>
-    <CourtCreateButton @click="isCreateModalVisible = true" />
+    <CourtCreateButton @click="createCourtState.isUserOnCreationStateData = true" />
     <CourtList />
-    <Teleport to="body">
-      <!-- <CourtCreateCancel /> -->
-      <CourtCreateModal v-model="isCreateModalVisible" />
-      <CourtCreateBottomToastPosition />
-    </Teleport>
   </div>
 </template>
 
@@ -21,13 +16,9 @@
 import HomeCourtSearchBar from "@/components/court/CourtSearchBar.vue";
 import HomeUserLocationSearchBar from "@/components/home/UserLocationSearchBar.vue";
 import CourtList from "@/components/court/CourtList.vue";
-import CourtCreateBottomToastPosition from "./CourtCreateBottomToastPosition.vue";
-import CourtCreateModal from "@/components/court/CourtCreateModal.vue";
 import CourtCreateButton from "@/components/court/CourtCreateButton.vue";
+import { useCreateCourtStore } from "@/stores";
+const createCourtState = useCreateCourtStore();
 
-import { ref } from "vue";
-// import CourtCreateCancel from "./CourtCreateCancel.vue";
-
-const isCreateModalVisible = ref(false);
 
 </script>

@@ -13,7 +13,6 @@ export class NominatimService {
   readonly baseUrl: string = 'https://nominatim.openstreetmap.org';
   readonly restQuery = {
     'accept-language': 'pl',
-    countrycodes: 'pl',
     limit: 5,
     format: 'json',
   };

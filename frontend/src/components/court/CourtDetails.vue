@@ -45,12 +45,14 @@ import fetchService from "@/services/fetch.service";
 import { toRefs, ref, watch, onMounted, computed } from "vue";
 import { CourtFromAPI, GeoPoint } from "@/types";
 import LoadingGradient from "@/components/base/LoadingGradient.vue";
-import { useUserLocationStore } from "@/stores/userLocation";
+import { useUserLocationStore, useCourtsStore } from "@/stores";
 import { storeToRefs } from "pinia";
-import { generatePathLink } from "@/utils/generate-path-link";
+import { generatePathLink } from "@/utils/generatePathLink";
 import CourtInfo from "./CourtInfo.vue";
 
 const userLocationStore = useUserLocationStore();
+const courtsStore = useCourtsStore();
+
 const { readonlyUserLocation } = storeToRefs(userLocationStore);
 
 type HomeCourtInfoProps = {
@@ -77,8 +79,11 @@ const loadCourtData = async () => {
   const receivedCourtData = await fetchService.getCourtById(courtId.value);
   if (!receivedCourtData) {
     router.push({ path: "/" });
+    return;
   }
   courtData.value = receivedCourtData;
+  courtsStore.setCourtsMapCenter(receivedCourtData.location);
+
   isFetching.value = false;
 };
 
@@ -108,3 +113,4 @@ onMounted(async () => {
   await loadCourtData();
 });
 </script>
+@/utils/generatePathLinkk
